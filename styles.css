@@ -1,0 +1,33 @@
+:root {
+  color-scheme: light;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #172d43;
+  background: #f2f6fa;
+  font-size: 16px;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; line-height: 1.6; }
+.container { width: 100%; max-width: 1008px; margin: 0 auto; padding: 0 24px; }
+.masthead { background: #172d43; color: #ffffff; padding: 56px 0 48px; }
+h1 { margin: 0 0 16px; font-size: 3rem; line-height: 1.1; font-weight: 700; letter-spacing: -0.04em; }
+.masthead p { margin: 0; font-size: 1.125rem; line-height: 1.65; }
+.apps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; padding: 32px 0; }
+.app { padding: 28px; background: #ffffff; border-radius: 12px; }
+.artwork { display: block; width: 72px; height: 72px; margin-bottom: 22px; overflow: hidden; }
+.artwork img { display: block; width: 100%; height: auto; max-height: 100%; object-fit: contain; }
+h2 { margin: 0 0 8px; font-size: 1.625rem; line-height: 1.3; letter-spacing: -0.025em; }
+.description { margin: 0 0 24px; max-width: 36ch; }
+.open-app { display: inline-flex; align-items: center; min-height: 48px; padding: 10px 18px; border-radius: 6px; background: #175da8; color: #ffffff; text-decoration: none; font-weight: 600; }
+.open-app:hover { background: #124c89; text-decoration: underline; }
+.open-app:focus { outline: 3px solid #172d43; outline-offset: 4px; }
+.hostname { margin: 12px 0 0; font-size: 0.875rem; color: #526579; overflow-wrap: anywhere; }
+footer.container { padding-bottom: 32px; color: #526579; }
+footer p { margin: 0; font-size: 0.9375rem; }
+
+@media (max-width: 640px) {
+  .masthead { padding: 36px 0; }
+  h1 { font-size: 2.25rem; }
+  .apps { grid-template-columns: 1fr; gap: 18px; padding: 24px 0; }
+  .app { padding: 24px; }
+}
