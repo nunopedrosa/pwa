@@ -22,13 +22,17 @@ Use the applications' existing artwork as the public directory's visual anchors,
 
 The central `AGENTS.md` now provides shared development guidance adapted from FuelLog. Adoption by sibling app repositories requires an explicit reference or reviewed copy in their own agent instructions; their existing instructions have not been changed.
 
-1. Configure HTTPS hosting for pwa.trekm.com and publish the three public assets after confirming deployment access and the web-root path.
-2. Verify the published page and artwork behavior on the live toolbox domain.
+1. Point `basecentral.link` at its static web host, confirm the web-root path, and enable HTTPS.
+2. Publish the three public assets to the new domain and verify the live page and artwork behavior.
 3. Add further apps as their names and site URLs are supplied.
 
 ## Implementation status
 
 The user approved the design and direct execution of the plan. On 2026-10-08, the static toolbox was implemented and checked in headless Chrome on desktop, at 320 px width, with enlarged text and with artwork blocked. Keyboard focus and referrer suppression passed, and both live artwork URLs returned HTTP 200. Shared agent instructions and the app registry are present. Publication remains pending; there is no claim of Safari 12 or physical-device verification.
+
+## 2026-10-09: Toolbox address change
+
+The original `pwa.trekm.com` target recorded above and in the first approved design was superseded by the user's request to move the toolbox to `https://basecentral.link/`. The canonical README, deployment instructions and host deploy-script usage now reflect the new domain. This changes the intended domain only; the toolbox page has not yet been published at the new address. DNS, the new web-root path, HTTPS and any handling of the former domain remain to be configured and verified.
 
 ## Future decisions
 

@@ -4,7 +4,7 @@ Date: 2026-10-08
 
 ## Intent and scope
 
-The user wants a central working folder for the shared concepts and goals of several local-first PWAs, while each app retains its own development folder and site. The central project also supplies a simple public toolbox at https://pwa.trekm.com/. Initial entries are FuelLog and Eternal Timer.
+The user wants a central working folder for the shared concepts and goals of several local-first PWAs, while each app retains its own development folder and site. The original approved design targeted https://pwa.trekm.com/ and initially included FuelLog and Eternal Timer. A later user request changes the toolbox's canonical address to https://basecentral.link/; the original target is retained here as design history.
 
 This design covers the documentation structure and a static directory page. It does not alter either existing app or add a shared backend.
 
@@ -56,7 +56,7 @@ The toolbox stores no personal data and reads no application storage. Browser or
 
 ## Hosting
 
-Both existing projects document DreamHost hosting. Use the same static hosting model for this directory unless the user chooses otherwise. Configure pwa.trekm.com, enable HTTPS and upload the public assets to its web root. The actual hosting account, web-root path and deployment access have not been supplied, so implementation can be previewed locally but deployment requires that information.
+Both existing projects document DreamHost hosting. Use the same static hosting model for this directory unless the user chooses otherwise. The initial target in this approved design was pwa.trekm.com. The user subsequently changed the canonical target to basecentral.link. Configure the new hostname, enable HTTPS and upload the public assets to its web root. The actual hosting account, DNS state, web-root path and deployment access have not been supplied, so the domain change is documented locally but publication requires host configuration.
 
 ## Verification
 

@@ -8,7 +8,7 @@ fail() {
 }
 
 if [ "$#" -ne 1 ] || [ -z "$1" ]; then
-    printf 'Usage: sh %s /absolute/path/to/pwa.trekm.com/web-root\n' "$0" >&2
+    printf 'Usage: sh %s /absolute/path/to/basecentral.link/web-root\n' "$0" >&2
     exit 2
 fi
 case "$1" in

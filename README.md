@@ -1,6 +1,6 @@
 # trekm PWA toolbox
 
-Central working project for the trekm collection of local-first Progressive Web Apps. The planned public toolbox lives at https://pwa.trekm.com/.
+Central working project for the trekm collection of local-first Progressive Web Apps. The public toolbox's new address is [basecentral.link](https://basecentral.link/). Hosting and live availability have not yet been verified.
 
 Each application keeps its own development folder, Git repository and deployed site. This project holds shared goals, decisions and an app directory; it does not hold application data or provide a shared backend.
 
@@ -51,7 +51,7 @@ Open http://127.0.0.1:8000/. The directory itself does not install a service wor
 3. Update the applications table in this README.
 4. Check the page on a narrow screen and with the artwork request blocked. Check keyboard focus and the destination link.
 
-## Deployment to pwa.trekm.com
+## Deployment to basecentral.link
 
 Configure the hostname and HTTPS with the hosting provider. The existing apps document DreamHost hosting; this toolbox also works on any static host.
 
@@ -77,10 +77,10 @@ git clone https://github.com/nunopedrosa/pwa.git "$HOME/repos/pwa"
 If your checkout already exists outside the public web directory, use its path instead. Run the deployment script on the host:
 
 ```sh
-sh "$HOME/repos/pwa/scripts/deploy.sh" "$HOME/pwa.trekm.com"
+sh "$HOME/repos/pwa/scripts/deploy.sh" "$HOME/basecentral.link"
 ```
 
-Replace the last argument with the domain's actual, existing web directory from your hosting settings. That directory must be writable by your SSH user. The same command performs the first publication and subsequent updates, and can be run from any current directory. Git must already be able to pull from the checkout's configured upstream; the script does not configure credentials or hosting.
+Replace the last argument with `basecentral.link`'s actual, existing web directory from your hosting settings. That directory must be writable by your SSH user. The same command performs the first publication and subsequent updates, and can be run from any current directory. Git must already be able to pull from the checkout's configured upstream; the script does not configure credentials, DNS or hosting.
 
 The script:
 

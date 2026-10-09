@@ -6,7 +6,7 @@ These instructions apply to development in this repository. They are also the re
 
 ## Scope and project boundaries
 
-- This repository is the central working project and public toolbox for `pwa.trekm.com`.
+- This repository is the central working project and public toolbox for `basecentral.link`.
 - Read `README.md`, `docs/PRINCIPLES.md` and `docs/APPS.md` before changing shared requirements or the directory.
 - Keep each app in its own development folder, repository and deployed site. Make app-specific changes in that app's repository.
 - Before working on an app, read its own `AGENTS.md`, README and relevant documentation. Use its code map if one exists; verify pointers against the implementation and update them when important code or data flows move.
@@ -61,6 +61,19 @@ These instructions apply to development in this repository. They are also the re
 - Treat imported text and external responses as untrusted data. Validate structure and values, render text safely and never execute imported content.
 - Avoid embedding provider credentials or other secrets in public assets. Separate any required server-side credentials from browser code.
 - Avoid unrelated third-party requests. Remote artwork for the directory comes only from the corresponding app hosts, with referrers suppressed.
+
+## Toolbox deployment script
+
+`scripts/deploy.sh` is the host-side deployment path for `basecentral.link`. Read the script, its usage in `README.md` and the regression checks in `scripts/test-deploy.py` before changing its behavior.
+
+- Keep deployment pull-only: use `git pull --ff-only` from a clean branch that tracks an upstream. Refuse detached branches, untracked/local changes, divergence and commits that exist only on the host. Never reset, clean, stash or push the checkout.
+- Require one absolute path to an existing writable public web directory. Resolve both paths before acting, and refuse a destination that overlaps with the source checkout. Keep the checkout outside the public directory.
+- Publish only `index.html`, `styles.css` and `favicon.svg`. Check that every source is a regular file and every destination is absent or a regular file before replacing any published file. Refuse symlinked source or destination assets.
+- Preserve unrelated public files such as `.htaccess`; do not use recursive synchronization or remove destination contents.
+- Stage complete copies on the destination filesystem before replacing public files. Set deployed file permissions to `0644`. Renaming each file is atomic on that filesystem, but the three-file update as a whole is not atomic; document this limitation and do not promise a transactional release.
+- Keep usage instructions, required host setup, public-file allowlist, cleanup/failure behavior and the deployment tests in `README.md` aligned with changes to the script.
+- Keep safety regressions in `scripts/test-deploy.py` aligned when changing validation, pull or publication behavior. Tests must use temporary local repositories and web directories; they must never require credentials, publish files or contact the production host.
+- The script may pull from its configured remote but must not configure credentials, expose secrets, change hosting settings or deploy to the live web directory implicitly. Treat production deployment as a separate, explicit user action.
 
 ## Verification and documentation
 
