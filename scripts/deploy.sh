@@ -35,31 +35,39 @@ printf 'Pulling %s\n' "$checkout"
 git -C "$checkout" pull --ff-only
 [ "$(git -C "$checkout" rev-parse HEAD)" = "$(git -C "$checkout" rev-parse '@{upstream}')" ] || fail 'The host branch has local commits; deploy from the remote branch.'
 
+published_assets='index.html styles.css favicon.svg assets/BaseCentral.jpg'
+
 # Validate every asset before changing any published file.
-for asset in index.html styles.css favicon.svg; do
+for asset in $published_assets; do
     [ -f "$checkout/$asset" ] && [ ! -L "$checkout/$asset" ] || fail "Missing or symlinked source asset: $asset"
     [ ! -L "$target/$asset" ] || fail "Refusing to replace a symlink: $asset"
     if [ -e "$target/$asset" ] && [ ! -f "$target/$asset" ]; then
         fail "The destination is not a regular file: $asset"
     fi
 done
+if [ -e "$target/assets" ]; then
+    [ -d "$target/assets" ] && [ ! -L "$target/assets" ] || fail 'The destination assets path must be a directory.'
+fi
 
 umask 022
 stage=$(mktemp -d "$target/.pwa-deploy.XXXXXXXX")
 cleanup() {
-    rm -f "$stage/index.html" "$stage/styles.css" "$stage/favicon.svg" || :
+    rm -f "$stage/index.html" "$stage/styles.css" "$stage/favicon.svg" "$stage/assets/BaseCentral.jpg" || :
+    rmdir "$stage/assets" 2>/dev/null || :
     rmdir "$stage" 2>/dev/null || :
 }
 trap cleanup 0
 trap 'exit 1' 1 2 15
 
-for asset in index.html styles.css favicon.svg; do
+mkdir "$stage/assets"
+for asset in $published_assets; do
     cp "$checkout/$asset" "$stage/$asset"
     chmod 644 "$stage/$asset"
 done
 # Each replacement is a rename on the same filesystem: no half-written files.
-# The three-file set is not one atomic release.
-for asset in styles.css favicon.svg index.html; do
+# The published set is not one atomic release.
+mkdir -p "$target/assets"
+for asset in styles.css favicon.svg assets/BaseCentral.jpg index.html; do
     mv -f "$stage/$asset" "$target/$asset"
 done
 

@@ -70,7 +70,7 @@ These instructions apply to development in this repository. They are also the re
 
 - Keep deployment pull-only: use `git pull --ff-only` from a clean branch that tracks an upstream. Refuse detached branches, untracked/local changes, divergence and commits that exist only on the host. Never reset, clean, stash or push the checkout.
 - Require one absolute path to an existing writable public web directory. Resolve both paths before acting, and refuse a destination that overlaps with the source checkout. Keep the checkout outside the public directory.
-- Publish only `index.html`, `styles.css` and `favicon.svg`. Check that every source is a regular file and every destination is absent or a regular file before replacing any published file. Refuse symlinked source or destination assets.
+- Publish only `index.html`, `styles.css`, `favicon.svg` and `assets/BaseCentral.jpg`. Check that every source is a regular file and every destination is absent or a regular file before replacing any published file. Refuse symlinked source or destination assets.
 - Preserve unrelated public files such as `.htaccess`; do not use recursive synchronization or remove destination contents.
 - Stage complete copies on the destination filesystem before replacing public files. Set deployed file permissions to `0644`. Renaming each file is atomic on that filesystem, but the three-file update as a whole is not atomic; document this limitation and do not promise a transactional release.
 - Keep usage instructions, required host setup, public-file allowlist, cleanup/failure behavior and the deployment tests in `README.md` aligned with changes to the script.

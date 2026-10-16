@@ -6,7 +6,7 @@ import tempfile
 import unittest
 
 SCRIPT = pathlib.Path(__file__).with_name("deploy.sh")
-ASSETS = ("index.html", "styles.css", "favicon.svg")
+ASSETS = ("index.html", "styles.css", "favicon.svg", "assets/BaseCentral.jpg")
 
 
 class DeploymentTests(unittest.TestCase):
@@ -25,8 +25,12 @@ class DeploymentTests(unittest.TestCase):
         self.assertTrue(SCRIPT.is_file(), "deployment script is not implemented")
         shutil.copyfile(SCRIPT, self.source / "scripts/deploy.sh")
         for name in ASSETS:
-            (self.source / name).write_text("initial " + name)
-            (self.web / name).write_text("published " + name)
+            path = self.source / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("initial " + name)
+            published = self.web / name
+            published.parent.mkdir(parents=True, exist_ok=True)
+            published.write_text("published " + name)
         (self.source / "README.md").write_text("not public")
         self.commit("initial")
         self.git("clone", str(self.source), str(self.checkout))
@@ -59,7 +63,10 @@ class DeploymentTests(unittest.TestCase):
         for name in ASSETS:
             self.assertEqual((self.web / name).read_text(), "new " + name)
         self.assertEqual((self.web / ".htaccess").read_text(), "host configuration")
-        self.assertEqual(set(p.name for p in self.web.iterdir()), {*ASSETS, ".htaccess"})
+        self.assertEqual(
+            set(p.name for p in self.web.iterdir()),
+            {"index.html", "styles.css", "favicon.svg", "assets", ".htaccess"},
+        )
 
     def test_dirty_checkout_does_not_publish(self):
         (self.checkout / "index.html").write_text("local edit")

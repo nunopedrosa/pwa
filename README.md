@@ -25,7 +25,7 @@ Use this project for cross-app goals, the directory and toolbox page. Implement 
 
 ## Toolbox page
 
-The toolbox is implemented as three public files: `index.html`, `styles.css` and `favicon.svg`. It uses no runtime JavaScript, backend, build step, analytics or local data storage.
+The toolbox is implemented as public `index.html`, `styles.css`, `favicon.svg` and `assets/BaseCentral.jpg`. It uses no runtime JavaScript, backend, build step, analytics or local data storage.
 
 Each app's artwork is referenced directly from its own site:
 
@@ -61,6 +61,7 @@ Upload **only** these files to the domain's public web root:
 index.html
 styles.css
 favicon.svg
+assets/BaseCentral.jpg
 ```
 
 Keep `AGENTS.md`, this README, `docs/` and `.git/` outside the public web root. The public assets are ready for upload; this project has not been deployed by this chat. Hosting access and the actual web-root path must be confirmed before publication.
@@ -87,9 +88,9 @@ The script:
 - Requires a clean checkout on a branch that tracks a remote branch.
 - Runs `git pull --ff-only` and refuses to deploy host-only commits.
 - Requires the checkout and public directory to be separate, non-overlapping paths.
-- Validates all three source files and destination entries before publication.
-- Copies only `index.html`, `styles.css` and `favicon.svg`; other host files, including `.htaccess`, stay in place.
-- Stages the files before replacing them, with readable permissions. Each file replacement is atomic, but the three files are not one atomic release.
+- Validates every published source file and destination entry before publication.
+- Copies only `index.html`, `styles.css`, `favicon.svg` and `assets/BaseCentral.jpg`; other host files, including `.htaccess`, stay in place.
+- Stages the files before replacing them, with readable permissions. Each file replacement is atomic, but the published set is not one atomic release.
 - Prints the deployed commit and directory. It does not verify DNS, HTTPS or live site availability.
 
 When a pull or validation fails, the published files are left unchanged. If a failure occurs during the final file replacements, publication may be partial; correct the reported problem and rerun the command. The script does not reset Git, discard local work or remove unrelated host files.
