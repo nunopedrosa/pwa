@@ -1,0 +1,819 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A quiet desert placeholder.">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#9eb8c4">
+  <title>You seem to be lost</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <style>
+    :root {
+      --sky-top: #8eafbf;
+      --sky-bottom: #f3ead6;
+      --sun: #f6e3a4;
+      --mesa: #c9b08a;
+      --mesa-far: #d7c4a4;
+      --dune: #e7d3a8;
+      --dune-mid: #d8c094;
+      --shade: #c4a67a;
+      --sand: #f4e6c8;
+      --metal: #8d9ea6;
+      --metal-dark: #5c6c74;
+      --metal-top: #d5e0e3;
+      --glow: #e7eef0;
+      --panel: #314852;
+      --panel-line: #8eb0be;
+      --mark: #f7f4ee;
+      --ink: #24302c;
+      --link: #1d4c52;
+      color-scheme: light;
+    }
+
+    [data-sky="dawn"] {
+      --sky-top: #e7a48c;
+      --sky-bottom: #f6ddc4;
+      --sun: #f3c48a;
+      --mesa: #c49878;
+      --mesa-far: #dbb498;
+      --dune: #e4c49a;
+      --dune-mid: #d2ae84;
+      --shade: #b88862;
+      --sand: #f0d8b4;
+      --metal: #9a8e86;
+      --metal-dark: #6e5e58;
+      --metal-top: #ead8cc;
+      --glow: #ffd2a8;
+      --panel: #4a4038;
+      --panel-line: #e2b48a;
+      --mark: #fff6ee;
+      --ink: #3a2a28;
+      --link: #8a3e32;
+    }
+
+    [data-sky="dusk"] {
+      --sky-top: #c4624a;
+      --sky-bottom: #3c3558;
+      --sun: #f0a06a;
+      --mesa: #a07858;
+      --mesa-far: #c49070;
+      --dune: #c9a06e;
+      --dune-mid: #a88458;
+      --shade: #7a5a40;
+      --sand: #d8b888;
+      --metal: #7e8490;
+      --metal-dark: #3e4650;
+      --metal-top: #c8c0b4;
+      --glow: #f0b070;
+      --panel: #2c3148;
+      --panel-line: #e0b090;
+      --mark: #fff1dc;
+      --ink: #f6efe4;
+      --link: #ffd7a8;
+    }
+
+    [data-sky="night"] {
+      --sky-top: #101826;
+      --sky-bottom: #243044;
+      --sun: #f4f0e4;
+      --mesa: #3a342c;
+      --mesa-far: #4a4036;
+      --dune: #4e4538;
+      --dune-mid: #3c342c;
+      --shade: #2a241e;
+      --sand: #5c5144;
+      --metal: #4a565e;
+      --metal-dark: #2a3238;
+      --metal-top: #6a787e;
+      --glow: #8fd9cc;
+      --panel: #1c2830;
+      --panel-line: #7ec8c4;
+      --mark: #e7fff8;
+      --ink: #f4ecdf;
+      --link: #b7efe4;
+      color-scheme: dark;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      height: 100%;
+    }
+
+    body {
+      min-height: 100%;
+      background: var(--sky-bottom);
+      color: var(--ink);
+      font-family: "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+    }
+
+    .scene {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .sky, .land, .stars, .sun, .moon, .glow {
+      transition: fill 1.6s linear, opacity 1.6s linear, stroke 1.6s linear;
+    }
+
+    .stars, .moon { opacity: 0; }
+    [data-sky="night"] .stars,
+    [data-sky="night"] .moon { opacity: 1; }
+    [data-sky="night"] .sun { opacity: 0; }
+
+
+    .mark {
+      fill: var(--mark);
+      font-weight: 650;
+    }
+    .bramble {
+      fill: none;
+      stroke: #6e4e32;
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    [data-sky="dusk"] .bramble { stroke: #e4c4a0; }
+    [data-sky="night"] .bramble { stroke: #e6d0ae; }
+
+    .beacon { opacity: 0.45; }
+    [data-sky="night"] .beacon,
+    [data-sky="dusk"] .beacon { animation: blink 2.6s ease-in-out infinite; }
+
+    @keyframes blink {
+      0%, 100% { opacity: 0.25; }
+      50% { opacity: 1; }
+    }
+
+    .glow { opacity: 0.35; }
+    [data-sky="dawn"] .glow { opacity: 0.45; }
+    [data-sky="dusk"] .glow { opacity: 0.75; }
+    [data-sky="night"] .glow { opacity: 1; }
+
+    .weed {
+      opacity: 0;
+      animation: cross 26s linear infinite;
+    }
+
+    .weed-late { animation-delay: -13s; }
+
+    @keyframes cross {
+      0% { transform: translate(300px, 270px) rotate(0deg) scale(1.35); opacity: 0; }
+      8% { opacity: 1; }
+      40% { transform: translate(680px, 400px) rotate(200deg) scale(1.35); opacity: 1; }
+      48%, 100% { transform: translate(820px, 450px) rotate(260deg) scale(1.35); opacity: 0; }
+    }
+
+    .message {
+      position: relative;
+      z-index: 1;
+      max-width: 34rem;
+      margin: 0;
+      padding: 12vh 8vw 0;
+      font-size: clamp(1.7rem, 3.4vw, 2.55rem);
+      font-weight: 500;
+      line-height: 1.35;
+      letter-spacing: -0.02em;
+      text-wrap: pretty;
+    }
+
+    a {
+      color: var(--link);
+      text-underline-offset: 0.16em;
+    }
+
+    a:focus-visible {
+      outline: 2px solid var(--link);
+      outline-offset: 4px;
+    }
+
+    @media (max-width: 640px) {
+      .message { padding-top: 8vh; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .sky, .land, .stars, .sun, .moon, .glow, .weed {
+        transition: none;
+      }
+      .weed { animation: none; opacity: 0; }
+      .beacon { animation: none; opacity: 0.8; }
+      .weed-late { opacity: 1; transform: translate(520px, 340px) scale(1.35); }
+    }
+  </style>
+</head>
+<body>
+  <svg class="scene" viewBox="0 0 1200 680" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+        <stop class="sky" offset="0" stop-color="var(--sky-top)"/>
+        <stop class="sky" offset="0.72" stop-color="var(--sky-bottom)"/>
+      </linearGradient>
+    </defs>
+    <rect width="1200" height="680" fill="url(#sky)"/>
+    <g id="world" transform="translate(-110,-8)">
+    <g class="stars" fill="var(--sand)">
+      <circle cx="90" cy="70" r="1.2"/>
+      <circle cx="160" cy="120" r="1"/>
+      <circle cx="250" cy="48" r="1.4"/>
+      <circle cx="340" cy="96" r="1"/>
+      <circle cx="470" cy="40" r="1.2"/>
+      <circle cx="560" cy="110" r="1"/>
+      <circle cx="690" cy="54" r="1.5"/>
+      <circle cx="810" cy="130" r="1"/>
+      <circle cx="930" cy="46" r="1.2"/>
+      <circle cx="1040" cy="100" r="1"/>
+      <circle cx="1120" cy="60" r="1.3"/>
+    </g>
+    <g class="sun">
+      <circle id="sun-halo" cx="0" cy="0" r="70" fill="var(--sun)" opacity="0.22"/>
+      <circle id="sun" cx="0" cy="0" r="28" fill="var(--sun)"/>
+    </g>
+    <g class="moon">
+      <circle cx="180" cy="110" r="18" fill="var(--sand)"/>
+      <circle cx="188" cy="104" r="14" fill="var(--sky-top)"/>
+    </g>
+
+<polygon class="land" fill="var(--sand)" points="600,188 644,210 600,232 556,210"/>
+<polygon class="land" fill="var(--dune)" points="556,210 600,232 556,254 512,232"/>
+<polygon class="land" fill="var(--shade)" points="600,228.5 644,250.5 644,254 600,232"/>
+<polygon class="land" fill="var(--dune-mid)" points="688,228.5 644,250.5 644,254 688,232"/>
+<polygon class="land" fill="var(--dune)" points="644,206.5 688,228.5 644,250.5 600,228.5"/>
+<polygon class="land" fill="var(--shade)" points="468,250.1 512,272.1 512,276 468,254"/>
+<polygon class="land" fill="var(--dune-mid)" points="556,250.1 512,272.1 512,276 556,254"/>
+<polygon class="land" fill="var(--sand)" points="512,228.1 556,250.1 512,272.1 468,250.1"/>
+<polygon class="land" fill="var(--shade)" points="556,247.1 600,269.1 600,276 556,254"/>
+<polygon class="land" fill="var(--dune-mid)" points="644,247.1 600,269.1 600,276 644,254"/>
+<polygon class="land" fill="var(--sand)" points="600,225.1 644,247.1 600,269.1 556,247.1"/>
+<polygon class="land" fill="var(--shade)" points="644,246.7 688,268.7 688,276 644,254"/>
+<polygon class="land" fill="var(--dune-mid)" points="732,246.7 688,268.7 688,276 732,254"/>
+<polygon class="land" fill="var(--sand)" points="688,224.7 732,246.7 688,268.7 644,246.7"/>
+<polygon class="land" fill="var(--shade)" points="424,271.3 468,293.3 468,298 424,276"/>
+<polygon class="land" fill="var(--dune-mid)" points="512,271.3 468,293.3 468,298 512,276"/>
+<polygon class="land" fill="var(--dune)" points="468,249.3 512,271.3 468,293.3 424,271.3"/>
+<polygon class="land" fill="var(--shade)" points="512,265.6 556,287.6 556,298 512,276"/>
+<polygon class="land" fill="var(--dune-mid)" points="600,265.6 556,287.6 556,298 600,276"/>
+<polygon class="land" fill="var(--dune)" points="556,243.6 600,265.6 556,287.6 512,265.6"/>
+<polygon class="land" fill="var(--shade)" points="600,261.8 644,283.8 644,298 600,276"/>
+<polygon class="land" fill="var(--dune-mid)" points="688,261.8 644,283.8 644,298 688,276"/>
+<polygon class="land" fill="var(--dune)" points="644,239.8 688,261.8 644,283.8 600,261.8"/>
+<polygon class="land" fill="var(--shade)" points="688,264.4 732,286.4 732,298 688,276"/>
+<polygon class="land" fill="var(--dune-mid)" points="776,264.4 732,286.4 732,298 776,276"/>
+<polygon class="land" fill="var(--dune)" points="732,242.4 776,264.4 732,286.4 688,264.4"/>
+<polygon class="land" fill="var(--shade)" points="380,292.7 424,314.7 424,320 380,298"/>
+<polygon class="land" fill="var(--dune-mid)" points="468,292.7 424,314.7 424,320 468,298"/>
+<polygon class="land" fill="var(--sand)" points="424,270.7 468,292.7 424,314.7 380,292.7"/>
+<polygon class="land" fill="var(--shade)" points="468,285.7 512,307.7 512,320 468,298"/>
+<polygon class="land" fill="var(--dune-mid)" points="556,285.7 512,307.7 512,320 556,298"/>
+<polygon class="land" fill="var(--sand)" points="512,263.7 556,285.7 512,307.7 468,285.7"/>
+<polygon class="land" fill="var(--shade)" points="556,276.7 600,298.7 600,320 556,298"/>
+<polygon class="land" fill="var(--dune-mid)" points="644,276.7 600,298.7 600,320 644,298"/>
+<polygon class="land" fill="var(--mesa-far)" points="600,254.7 644,276.7 600,298.7 556,276.7"/>
+<polygon class="land" fill="var(--shade)" points="644,275.5 688,297.5 688,320 644,298"/>
+<polygon class="land" fill="var(--dune-mid)" points="732,275.5 688,297.5 688,320 732,298"/>
+<polygon class="land" fill="var(--mesa-far)" points="688,253.5 732,275.5 688,297.5 644,275.5"/>
+<polygon class="land" fill="var(--shade)" points="732,283.5 776,305.5 776,320 732,298"/>
+<polygon class="land" fill="var(--dune-mid)" points="820,283.5 776,305.5 776,320 820,298"/>
+<polygon class="land" fill="var(--sand)" points="776,261.5 820,283.5 776,305.5 732,283.5"/>
+<polygon class="land" fill="var(--shade)" points="336,313.1 380,335.1 380,342 336,320"/>
+<polygon class="land" fill="var(--dune-mid)" points="424,313.1 380,335.1 380,342 424,320"/>
+<polygon class="land" fill="var(--dune)" points="380,291.1 424,313.1 380,335.1 336,313.1"/>
+<polygon class="land" fill="var(--shade)" points="424,307.2 468,329.2 468,342 424,320"/>
+<polygon class="land" fill="var(--dune-mid)" points="512,307.2 468,329.2 468,342 512,320"/>
+<polygon class="land" fill="var(--dune)" points="468,285.2 512,307.2 468,329.2 424,307.2"/>
+<polygon class="land" fill="var(--shade)" points="512,295.1 556,317.1 556,342 512,320"/>
+<polygon class="land" fill="var(--dune-mid)" points="600,295.1 556,317.1 556,342 600,320"/>
+<polygon class="land" fill="var(--mesa)" points="556,273.1 600,295.1 556,317.1 512,295.1"/>
+<polygon class="land" fill="var(--shade)" points="600,286.4 644,308.4 644,342 600,320"/>
+<polygon class="land" fill="var(--dune-mid)" points="688,286.4 644,308.4 644,342 688,320"/>
+<polygon class="land" fill="var(--mesa)" points="644,264.4 688,286.4 644,308.4 600,286.4"/>
+<polygon class="land" fill="var(--shade)" points="688,291.9 732,313.9 732,342 688,320"/>
+<polygon class="land" fill="var(--dune-mid)" points="776,291.9 732,313.9 732,342 776,320"/>
+<polygon class="land" fill="var(--mesa)" points="732,269.9 776,291.9 732,313.9 688,291.9"/>
+<polygon class="land" fill="var(--shade)" points="776,304.8 820,326.8 820,342 776,320"/>
+<polygon class="land" fill="var(--dune-mid)" points="864,304.8 820,326.8 820,342 864,320"/>
+<polygon class="land" fill="var(--dune)" points="820,282.8 864,304.8 820,326.8 776,304.8"/>
+<polygon class="land" fill="var(--shade)" points="292,331.7 336,353.7 336,364 292,342"/>
+<polygon class="land" fill="var(--dune-mid)" points="380,331.7 336,353.7 336,364 380,342"/>
+<polygon class="land" fill="var(--sand)" points="336,309.7 380,331.7 336,353.7 292,331.7"/>
+<polygon class="land" fill="var(--shade)" points="380,327.6 424,349.6 424,364 380,342"/>
+<polygon class="land" fill="var(--dune-mid)" points="468,327.6 424,349.6 424,364 468,342"/>
+<polygon class="land" fill="var(--sand)" points="424,305.6 468,327.6 424,349.6 380,327.6"/>
+<polygon class="land" fill="var(--shade)" points="468,317.8 512,339.8 512,364 468,342"/>
+<polygon class="land" fill="var(--dune-mid)" points="556,317.8 512,339.8 512,364 556,342"/>
+<polygon class="land" fill="var(--mesa-far)" points="512,295.8 556,317.8 512,339.8 468,317.8"/>
+<polygon class="land" fill="var(--shade)" points="556,303.2 600,325.2 600,364 556,342"/>
+<polygon class="land" fill="var(--dune-mid)" points="644,303.2 600,325.2 600,364 644,342"/>
+<polygon class="land" fill="var(--mesa-far)" points="600,281.2 644,303.2 600,325.2 556,303.2"/>
+<polygon class="land" fill="var(--shade)" points="644,300.4 688,322.4 688,364 644,342"/>
+<polygon class="land" fill="var(--dune-mid)" points="732,300.4 688,322.4 688,364 732,342"/>
+<polygon class="land" fill="var(--mesa-far)" points="688,278.4 732,300.4 688,322.4 644,300.4"/>
+<polygon class="land" fill="var(--shade)" points="732,313.1 776,335.1 776,364 732,342"/>
+<polygon class="land" fill="var(--dune-mid)" points="820,313.1 776,335.1 776,364 820,342"/>
+<polygon class="land" fill="var(--mesa-far)" points="776,291.1 820,313.1 776,335.1 732,313.1"/>
+<polygon class="land" fill="var(--shade)" points="820,326.8 864,348.8 864,364 820,342"/>
+<polygon class="land" fill="var(--dune-mid)" points="908,326.8 864,348.8 864,364 908,342"/>
+<polygon class="land" fill="var(--sand)" points="864,304.8 908,326.8 864,348.8 820,326.8"/>
+<polygon class="land" fill="var(--shade)" points="248,350.6 292,372.6 292,386 248,364"/>
+<polygon class="land" fill="var(--dune-mid)" points="336,350.6 292,372.6 292,386 336,364"/>
+<polygon class="land" fill="var(--dune)" points="292,328.6 336,350.6 292,372.6 248,350.6"/>
+<polygon class="land" fill="var(--shade)" points="336,345 380,367 380,386 336,364"/>
+<polygon class="land" fill="var(--dune-mid)" points="424,345 380,367 380,386 424,364"/>
+<polygon class="land" fill="var(--dune)" points="380,323 424,345 380,367 336,345"/>
+<polygon class="land" fill="var(--shade)" points="424,340.8 468,362.8 468,386 424,364"/>
+<polygon class="land" fill="var(--dune-mid)" points="512,340.8 468,362.8 468,386 512,364"/>
+<polygon class="land" fill="var(--mesa)" points="468,318.8 512,340.8 468,362.8 424,340.8"/>
+<polygon class="land" fill="var(--shade)" points="512,328.1 556,350.1 556,386 512,364"/>
+<polygon class="land" fill="var(--dune-mid)" points="600,328.1 556,350.1 556,386 600,364"/>
+<polygon class="land" fill="var(--mesa)" points="556,306.1 600,328.1 556,350.1 512,328.1"/>
+<polygon class="land" fill="var(--shade)" points="600,316.5 644,338.5 644,386 600,364"/>
+<polygon class="land" fill="var(--dune-mid)" points="688,316.5 644,338.5 644,386 688,364"/>
+<polygon class="land" fill="var(--mesa)" points="644,294.5 688,316.5 644,338.5 600,316.5"/>
+<polygon class="land" fill="var(--shade)" points="688,321.9 732,343.9 732,386 688,364"/>
+<polygon class="land" fill="var(--dune-mid)" points="776,321.9 732,343.9 732,386 776,364"/>
+<polygon class="land" fill="var(--mesa)" points="732,299.9 776,321.9 732,343.9 688,321.9"/>
+<polygon class="land" fill="var(--shade)" points="776,336 820,358 820,386 776,364"/>
+<polygon class="land" fill="var(--dune-mid)" points="864,336 820,358 820,386 864,364"/>
+<polygon class="land" fill="var(--mesa)" points="820,314 864,336 820,358 776,336"/>
+<polygon class="land" fill="var(--shade)" points="864,347.6 908,369.6 908,386 864,364"/>
+<polygon class="land" fill="var(--dune-mid)" points="952,347.6 908,369.6 908,386 952,364"/>
+<polygon class="land" fill="var(--dune)" points="908,325.6 952,347.6 908,369.6 864,347.6"/>
+<polygon class="land" fill="var(--shade)" points="204,372.9 248,394.9 248,408 204,386"/>
+<polygon class="land" fill="var(--dune-mid)" points="292,372.9 248,394.9 248,408 292,386"/>
+<polygon class="land" fill="var(--sand)" points="248,350.9 292,372.9 248,394.9 204,372.9"/>
+<polygon class="land" fill="var(--shade)" points="292,362.3 336,384.3 336,408 292,386"/>
+<polygon class="land" fill="var(--dune-mid)" points="380,362.3 336,384.3 336,408 380,386"/>
+<polygon class="land" fill="var(--mesa-far)" points="336,340.3 380,362.3 336,384.3 292,362.3"/>
+<polygon class="land" fill="var(--shade)" points="380,360.1 424,382.1 424,408 380,386"/>
+<polygon class="land" fill="var(--dune-mid)" points="468,360.1 424,382.1 424,408 468,386"/>
+<polygon class="land" fill="var(--mesa-far)" points="424,338.1 468,360.1 424,382.1 380,360.1"/>
+<polygon class="land" fill="var(--shade)" points="468,356.1 512,378.1 512,408 468,386"/>
+<polygon class="land" fill="var(--dune-mid)" points="556,356.1 512,378.1 512,408 556,386"/>
+<polygon class="land" fill="var(--mesa-far)" points="512,334.1 556,356.1 512,378.1 468,356.1"/>
+<polygon class="land" fill="var(--shade)" points="556,343.6 600,365.6 600,408 556,386"/>
+<polygon class="land" fill="var(--dune-mid)" points="644,343.6 600,365.6 600,408 644,386"/>
+<polygon class="land" fill="var(--mesa-far)" points="600,321.6 644,343.6 600,365.6 556,343.6"/>
+<polygon class="land" fill="var(--shade)" points="644,338.9 688,360.9 688,408 644,386"/>
+<polygon class="land" fill="var(--dune-mid)" points="732,338.9 688,360.9 688,408 732,386"/>
+<polygon class="land" fill="var(--mesa-far)" points="688,316.9 732,338.9 688,360.9 644,338.9"/>
+<polygon class="land" fill="var(--shade)" points="732,346.9 776,368.9 776,408 732,386"/>
+<polygon class="land" fill="var(--dune-mid)" points="820,346.9 776,368.9 776,408 820,386"/>
+<polygon class="land" fill="var(--mesa-far)" points="776,324.9 820,346.9 776,368.9 732,346.9"/>
+<polygon class="land" fill="var(--shade)" points="820,357.1 864,379.1 864,408 820,386"/>
+<polygon class="land" fill="var(--dune-mid)" points="908,357.1 864,379.1 864,408 908,386"/>
+<polygon class="land" fill="var(--mesa-far)" points="864,335.1 908,357.1 864,379.1 820,357.1"/>
+<polygon class="land" fill="var(--shade)" points="908,368.1 952,390.1 952,408 908,386"/>
+<polygon class="land" fill="var(--dune-mid)" points="996,368.1 952,390.1 952,408 996,386"/>
+<polygon class="land" fill="var(--sand)" points="952,346.1 996,368.1 952,390.1 908,368.1"/>
+<polygon class="land" fill="var(--shade)" points="160,399 204,421 204,430 160,408"/>
+<polygon class="land" fill="var(--dune-mid)" points="248,399 204,421 204,430 248,408"/>
+<polygon class="land" fill="var(--dune)" points="204,377 248,399 204,421 160,399"/>
+<polygon class="land" fill="var(--shade)" points="248,385.3 292,407.3 292,430 248,408"/>
+<polygon class="land" fill="var(--dune-mid)" points="336,385.3 292,407.3 292,430 336,408"/>
+<polygon class="land" fill="var(--mesa)" points="292,363.3 336,385.3 292,407.3 248,385.3"/>
+<polygon class="land" fill="var(--shade)" points="336,378.4 380,400.4 380,430 336,408"/>
+<polygon class="land" fill="var(--dune-mid)" points="424,378.4 380,400.4 380,430 424,408"/>
+<polygon class="land" fill="var(--mesa)" points="380,356.4 424,378.4 380,400.4 336,378.4"/>
+<polygon class="land" fill="var(--shade)" points="424,381 468,403 468,430 424,408"/>
+<polygon class="land" fill="var(--dune-mid)" points="512,381 468,403 468,430 512,408"/>
+<polygon class="land" fill="var(--mesa)" points="468,359 512,381 468,403 424,381"/>
+<polygon class="land" fill="var(--shade)" points="512,376.4 556,398.4 556,430 512,408"/>
+<polygon class="land" fill="var(--dune-mid)" points="600,376.4 556,398.4 556,430 600,408"/>
+<polygon class="land" fill="var(--mesa)" points="556,354.4 600,376.4 556,398.4 512,376.4"/>
+<polygon class="land" fill="var(--shade)" points="600,367.3 644,389.3 644,430 600,408"/>
+<polygon class="land" fill="var(--dune-mid)" points="688,367.3 644,389.3 644,430 688,408"/>
+<polygon class="land" fill="var(--mesa)" points="644,345.3 688,367.3 644,389.3 600,367.3"/>
+<polygon class="land" fill="var(--shade)" points="688,366.2 732,388.2 732,430 688,408"/>
+<polygon class="land" fill="var(--dune-mid)" points="776,366.2 732,388.2 732,430 776,408"/>
+<polygon class="land" fill="var(--mesa)" points="732,344.2 776,366.2 732,388.2 688,366.2"/>
+<polygon class="land" fill="var(--shade)" points="776,369.6 820,391.6 820,430 776,408"/>
+<polygon class="land" fill="var(--dune-mid)" points="864,369.6 820,391.6 820,430 864,408"/>
+<polygon class="land" fill="var(--mesa)" points="820,347.6 864,369.6 820,391.6 776,369.6"/>
+<polygon class="land" fill="var(--shade)" points="864,377.2 908,399.2 908,430 864,408"/>
+<polygon class="land" fill="var(--dune-mid)" points="952,377.2 908,399.2 908,430 952,408"/>
+<polygon class="land" fill="var(--mesa)" points="908,355.2 952,377.2 908,399.2 864,377.2"/>
+<polygon class="land" fill="var(--shade)" points="952,391 996,413 996,430 952,408"/>
+<polygon class="land" fill="var(--dune-mid)" points="1040,391 996,413 996,430 1040,408"/>
+<polygon class="land" fill="var(--dune)" points="996,369 1040,391 996,413 952,391"/>
+<polygon class="land" fill="var(--shade)" points="116,425.7 160,447.7 160,452 116,430"/>
+<polygon class="land" fill="var(--dune-mid)" points="204,425.7 160,447.7 160,452 204,430"/>
+<polygon class="land" fill="var(--sand)" points="160,403.7 204,425.7 160,447.7 116,425.7"/>
+<polygon class="land" fill="var(--shade)" points="204,414.4 248,436.4 248,452 204,430"/>
+<polygon class="land" fill="var(--dune-mid)" points="292,414.4 248,436.4 248,452 292,430"/>
+<polygon class="land" fill="var(--sand)" points="248,392.4 292,414.4 248,436.4 204,414.4"/>
+<polygon class="land" fill="var(--shade)" points="292,402.4 336,424.4 336,452 292,430"/>
+<polygon class="land" fill="var(--dune-mid)" points="380,402.4 336,424.4 336,452 380,430"/>
+<polygon class="land" fill="var(--mesa-far)" points="336,380.4 380,402.4 336,424.4 292,402.4"/>
+<polygon class="land" fill="var(--shade)" points="380,403.2 424,425.2 424,452 380,430"/>
+<polygon class="land" fill="var(--dune-mid)" points="468,403.2 424,425.2 424,452 468,430"/>
+<polygon class="land" fill="var(--mesa-far)" points="424,381.2 468,403.2 424,425.2 380,403.2"/>
+<polygon class="land" fill="var(--shade)" points="468,407.1 512,429.1 512,452 468,430"/>
+<polygon class="land" fill="var(--dune-mid)" points="556,407.1 512,429.1 512,452 556,430"/>
+<polygon class="land" fill="var(--mesa-far)" points="512,385.1 556,407.1 512,429.1 468,407.1"/>
+<polygon class="land" fill="var(--shade)" points="556,401.9 600,423.9 600,452 556,430"/>
+<polygon class="land" fill="var(--dune-mid)" points="644,401.9 600,423.9 600,452 644,430"/>
+<polygon class="land" fill="var(--mesa-far)" points="600,379.9 644,401.9 600,423.9 556,401.9"/>
+<polygon class="land" fill="var(--shade)" points="644,395.7 688,417.7 688,452 644,430"/>
+<polygon class="land" fill="var(--dune-mid)" points="732,395.7 688,417.7 688,452 732,430"/>
+<polygon class="land" fill="var(--mesa-far)" points="688,373.7 732,395.7 688,417.7 644,395.7"/>
+<polygon class="land" fill="var(--shade)" points="732,391.6 776,413.6 776,452 732,430"/>
+<polygon class="land" fill="var(--dune-mid)" points="820,391.6 776,413.6 776,452 820,430"/>
+<polygon class="land" fill="var(--mesa-far)" points="776,369.6 820,391.6 776,413.6 732,391.6"/>
+<polygon class="land" fill="var(--shade)" points="820,390.5 864,412.5 864,452 820,430"/>
+<polygon class="land" fill="var(--dune-mid)" points="908,390.5 864,412.5 864,452 908,430"/>
+<polygon class="land" fill="var(--mesa-far)" points="864,368.5 908,390.5 864,412.5 820,390.5"/>
+<polygon class="land" fill="var(--shade)" points="908,400.8 952,422.8 952,452 908,430"/>
+<polygon class="land" fill="var(--dune-mid)" points="996,400.8 952,422.8 952,452 996,430"/>
+<polygon class="land" fill="var(--mesa-far)" points="952,378.8 996,400.8 952,422.8 908,400.8"/>
+<polygon class="land" fill="var(--shade)" points="996,416.6 1040,438.6 1040,452 996,430"/>
+<polygon class="land" fill="var(--dune-mid)" points="1084,416.6 1040,438.6 1040,452 1084,430"/>
+<polygon class="land" fill="var(--sand)" points="1040,394.6 1084,416.6 1040,438.6 996,416.6"/>
+<polygon class="land" fill="var(--dune)" points="116,430 160,452 116,474 72,452"/>
+<polygon class="land" fill="var(--shade)" points="160,444.5 204,466.5 204,474 160,452"/>
+<polygon class="land" fill="var(--dune-mid)" points="248,444.5 204,466.5 204,474 248,452"/>
+<polygon class="land" fill="var(--dune)" points="204,422.5 248,444.5 204,466.5 160,444.5"/>
+<polygon class="land" fill="var(--shade)" points="248,433.2 292,455.2 292,474 248,452"/>
+<polygon class="land" fill="var(--dune-mid)" points="336,433.2 292,455.2 292,474 336,452"/>
+<polygon class="land" fill="var(--dune)" points="292,411.2 336,433.2 292,455.2 248,433.2"/>
+<polygon class="land" fill="var(--shade)" points="336,428.3 380,450.3 380,474 336,452"/>
+<polygon class="land" fill="var(--dune-mid)" points="424,428.3 380,450.3 380,474 424,452"/>
+<polygon class="land" fill="var(--mesa)" points="380,406.3 424,428.3 380,450.3 336,428.3"/>
+<polygon class="land" fill="var(--shade)" points="424,433.6 468,455.6 468,474 424,452"/>
+<polygon class="land" fill="var(--dune-mid)" points="512,433.6 468,455.6 468,474 512,452"/>
+<polygon class="land" fill="var(--dune)" points="468,411.6 512,433.6 468,455.6 424,433.6"/>
+<polygon class="land" fill="var(--shade)" points="512,435.1 556,457.1 556,474 512,452"/>
+<polygon class="land" fill="var(--dune-mid)" points="600,435.1 556,457.1 556,474 600,452"/>
+<polygon class="land" fill="var(--dune)" points="556,413.1 600,435.1 556,457.1 512,435.1"/>
+<polygon class="land" fill="var(--shade)" points="600,430 644,452 644,474 600,452"/>
+<polygon class="land" fill="var(--dune-mid)" points="688,430 644,452 644,474 688,452"/>
+<polygon class="land" fill="var(--mesa)" points="644,408 688,430 644,452 600,430"/>
+<polygon class="land" fill="var(--shade)" points="688,422.8 732,444.8 732,474 688,452"/>
+<polygon class="land" fill="var(--dune-mid)" points="776,422.8 732,444.8 732,474 776,452"/>
+<polygon class="land" fill="var(--mesa)" points="732,400.8 776,422.8 732,444.8 688,422.8"/>
+<polygon class="land" fill="var(--shade)" points="776,414.3 820,436.3 820,474 776,452"/>
+<polygon class="land" fill="var(--dune-mid)" points="864,414.3 820,436.3 820,474 864,452"/>
+<polygon class="land" fill="var(--mesa)" points="820,392.3 864,414.3 820,436.3 776,414.3"/>
+<polygon class="land" fill="var(--shade)" points="864,414.7 908,436.7 908,474 864,452"/>
+<polygon class="land" fill="var(--dune-mid)" points="952,414.7 908,436.7 908,474 952,452"/>
+<polygon class="land" fill="var(--mesa)" points="908,392.7 952,414.7 908,436.7 864,414.7"/>
+<polygon class="land" fill="var(--shade)" points="952,428.7 996,450.7 996,474 952,452"/>
+<polygon class="land" fill="var(--dune-mid)" points="1040,428.7 996,450.7 996,474 1040,452"/>
+<polygon class="land" fill="var(--mesa)" points="996,406.7 1040,428.7 996,450.7 952,428.7"/>
+<polygon class="land" fill="var(--shade)" points="1040,442.9 1084,464.9 1084,474 1040,452"/>
+<polygon class="land" fill="var(--dune-mid)" points="1128,442.9 1084,464.9 1084,474 1128,452"/>
+<polygon class="land" fill="var(--dune)" points="1084,420.9 1128,442.9 1084,464.9 1040,442.9"/>
+<polygon class="land" fill="var(--sand)" points="160,452 204,474 160,496 116,474"/>
+<polygon class="land" fill="var(--shade)" points="204,465 248,487 248,496 204,474"/>
+<polygon class="land" fill="var(--dune-mid)" points="292,465 248,487 248,496 292,474"/>
+<polygon class="land" fill="var(--sand)" points="248,443 292,465 248,487 204,465"/>
+<polygon class="land" fill="var(--shade)" points="292,458.2 336,480.2 336,496 292,474"/>
+<polygon class="land" fill="var(--dune-mid)" points="380,458.2 336,480.2 336,496 380,474"/>
+<polygon class="land" fill="var(--sand)" points="336,436.2 380,458.2 336,480.2 292,458.2"/>
+<polygon class="land" fill="var(--shade)" points="380,459.4 424,481.4 424,496 380,474"/>
+<polygon class="land" fill="var(--dune-mid)" points="468,459.4 424,481.4 424,496 468,474"/>
+<polygon class="land" fill="var(--sand)" points="424,437.4 468,459.4 424,481.4 380,459.4"/>
+<polygon class="land" fill="var(--shade)" points="468,463.6 512,485.6 512,496 468,474"/>
+<polygon class="land" fill="var(--dune-mid)" points="556,463.6 512,485.6 512,496 556,474"/>
+<polygon class="land" fill="var(--sand)" points="512,441.6 556,463.6 512,485.6 468,463.6"/>
+<polygon class="land" fill="var(--shade)" points="556,462.5 600,484.5 600,496 556,474"/>
+<polygon class="land" fill="var(--dune-mid)" points="644,462.5 600,484.5 600,496 644,474"/>
+<polygon class="land" fill="var(--sand)" points="600,440.5 644,462.5 600,484.5 556,462.5"/>
+<polygon class="land" fill="var(--shade)" points="644,456.9 688,478.9 688,496 644,474"/>
+<polygon class="land" fill="var(--dune-mid)" points="732,456.9 688,478.9 688,496 732,474"/>
+<polygon class="land" fill="var(--sand)" points="688,434.9 732,456.9 688,478.9 644,456.9"/>
+<polygon class="land" fill="var(--shade)" points="732,446.9 776,468.9 776,496 732,474"/>
+<polygon class="land" fill="var(--dune-mid)" points="820,446.9 776,468.9 776,496 820,474"/>
+<polygon class="land" fill="var(--mesa-far)" points="776,424.9 820,446.9 776,468.9 732,446.9"/>
+<polygon class="land" fill="var(--shade)" points="820,438.4 864,460.4 864,496 820,474"/>
+<polygon class="land" fill="var(--dune-mid)" points="908,438.4 864,460.4 864,496 908,474"/>
+<polygon class="land" fill="var(--mesa-far)" points="864,416.4 908,438.4 864,460.4 820,438.4"/>
+<polygon class="land" fill="var(--shade)" points="908,443.4 952,465.4 952,496 908,474"/>
+<polygon class="land" fill="var(--dune-mid)" points="996,443.4 952,465.4 952,496 996,474"/>
+<polygon class="land" fill="var(--mesa-far)" points="952,421.4 996,443.4 952,465.4 908,443.4"/>
+<polygon class="land" fill="var(--shade)" points="996,457.3 1040,479.3 1040,496 996,474"/>
+<polygon class="land" fill="var(--dune-mid)" points="1084,457.3 1040,479.3 1040,496 1084,474"/>
+<polygon class="land" fill="var(--sand)" points="1040,435.3 1084,457.3 1040,479.3 996,457.3"/>
+<polygon class="land" fill="var(--shade)" points="1084,467.8 1128,489.8 1128,496 1084,474"/>
+<polygon class="land" fill="var(--dune-mid)" points="1172,467.8 1128,489.8 1128,496 1172,474"/>
+<polygon class="land" fill="var(--sand)" points="1128,445.8 1172,467.8 1128,489.8 1084,467.8"/>
+<polygon class="land" fill="var(--shade)" points="160,493 204,515 204,518 160,496"/>
+<polygon class="land" fill="var(--dune-mid)" points="248,493 204,515 204,518 248,496"/>
+<polygon class="land" fill="var(--dune)" points="204,471 248,493 204,515 160,493"/>
+<polygon class="land" fill="var(--shade)" points="248,488.5 292,510.5 292,518 248,496"/>
+<polygon class="land" fill="var(--dune-mid)" points="336,488.5 292,510.5 292,518 336,496"/>
+<polygon class="land" fill="var(--dune)" points="292,466.5 336,488.5 292,510.5 248,488.5"/>
+<polygon class="land" fill="var(--shade)" points="336,486.6 380,508.6 380,518 336,496"/>
+<polygon class="land" fill="var(--dune-mid)" points="424,486.6 380,508.6 380,518 424,496"/>
+<polygon class="land" fill="var(--dune)" points="380,464.6 424,486.6 380,508.6 336,486.6"/>
+<polygon class="land" fill="var(--shade)" points="424,489.3 468,511.3 468,518 424,496"/>
+<polygon class="land" fill="var(--dune-mid)" points="512,489.3 468,511.3 468,518 512,496"/>
+<polygon class="land" fill="var(--dune)" points="468,467.3 512,489.3 468,511.3 424,489.3"/>
+<polygon class="land" fill="var(--shade)" points="512,490.6 556,512.6 556,518 512,496"/>
+<polygon class="land" fill="var(--dune-mid)" points="600,490.6 556,512.6 556,518 600,496"/>
+<polygon class="land" fill="var(--dune)" points="556,468.6 600,490.6 556,512.6 512,490.6"/>
+<polygon class="land" fill="var(--shade)" points="600,488.1 644,510.1 644,518 600,496"/>
+<polygon class="land" fill="var(--dune-mid)" points="688,488.1 644,510.1 644,518 688,496"/>
+<polygon class="land" fill="var(--dune)" points="644,466.1 688,488.1 644,510.1 600,488.1"/>
+<polygon class="land" fill="var(--shade)" points="688,481.2 732,503.2 732,518 688,496"/>
+<polygon class="land" fill="var(--dune-mid)" points="776,481.2 732,503.2 732,518 776,496"/>
+<polygon class="land" fill="var(--dune)" points="732,459.2 776,481.2 732,503.2 688,481.2"/>
+<polygon class="land" fill="var(--shade)" points="776,470.5 820,492.5 820,518 776,496"/>
+<polygon class="land" fill="var(--dune-mid)" points="864,470.5 820,492.5 820,518 864,496"/>
+<polygon class="land" fill="var(--mesa)" points="820,448.5 864,470.5 820,492.5 776,470.5"/>
+<polygon class="land" fill="var(--shade)" points="864,465.7 908,487.7 908,518 864,496"/>
+<polygon class="land" fill="var(--dune-mid)" points="952,465.7 908,487.7 908,518 952,496"/>
+<polygon class="land" fill="var(--mesa)" points="908,443.7 952,465.7 908,487.7 864,465.7"/>
+<polygon class="land" fill="var(--shade)" points="952,472.7 996,494.7 996,518 952,496"/>
+<polygon class="land" fill="var(--dune-mid)" points="1040,472.7 996,494.7 996,518 1040,496"/>
+<polygon class="land" fill="var(--mesa)" points="996,450.7 1040,472.7 996,494.7 952,472.7"/>
+<polygon class="land" fill="var(--shade)" points="1040,483.9 1084,505.9 1084,518 1040,496"/>
+<polygon class="land" fill="var(--dune-mid)" points="1128,483.9 1084,505.9 1084,518 1128,496"/>
+<polygon class="land" fill="var(--dune)" points="1084,461.9 1128,483.9 1084,505.9 1040,483.9"/>
+<polygon class="land" fill="var(--shade)" points="1128,491.5 1172,513.5 1172,518 1128,496"/>
+<polygon class="land" fill="var(--dune-mid)" points="1216,491.5 1172,513.5 1172,518 1216,496"/>
+<polygon class="land" fill="var(--dune)" points="1172,469.5 1216,491.5 1172,513.5 1128,491.5"/>
+<polygon class="land" fill="var(--sand)" points="248,496 292,518 248,540 204,518"/>
+<polygon class="land" fill="var(--shade)" points="292,513.6 336,535.6 336,540 292,518"/>
+<polygon class="land" fill="var(--dune-mid)" points="380,513.6 336,535.6 336,540 380,518"/>
+<polygon class="land" fill="var(--sand)" points="336,491.6 380,513.6 336,535.6 292,513.6"/>
+<polygon class="land" fill="var(--shade)" points="380,514 424,536 424,540 380,518"/>
+<polygon class="land" fill="var(--dune-mid)" points="468,514 424,536 424,540 468,518"/>
+<polygon class="land" fill="var(--sand)" points="424,492 468,514 424,536 380,514"/>
+<polygon class="land" fill="var(--sand)" points="512,496 556,518 512,540 468,518"/>
+<polygon class="land" fill="var(--sand)" points="600,496 644,518 600,540 556,518"/>
+<polygon class="land" fill="var(--shade)" points="644,511.7 688,533.7 688,540 644,518"/>
+<polygon class="land" fill="var(--dune-mid)" points="732,511.7 688,533.7 688,540 732,518"/>
+<polygon class="land" fill="var(--sand)" points="688,489.7 732,511.7 688,533.7 644,511.7"/>
+<polygon class="land" fill="var(--shade)" points="732,504 776,526 776,540 732,518"/>
+<polygon class="land" fill="var(--dune-mid)" points="820,504 776,526 776,540 820,518"/>
+<polygon class="land" fill="var(--sand)" points="776,482 820,504 776,526 732,504"/>
+<polygon class="land" fill="var(--shade)" points="820,494.9 864,516.9 864,540 820,518"/>
+<polygon class="land" fill="var(--dune-mid)" points="908,494.9 864,516.9 864,540 908,518"/>
+<polygon class="land" fill="var(--mesa-far)" points="864,472.9 908,494.9 864,516.9 820,494.9"/>
+<polygon class="land" fill="var(--shade)" points="908,493 952,515 952,540 908,518"/>
+<polygon class="land" fill="var(--dune-mid)" points="996,493 952,515 952,540 996,518"/>
+<polygon class="land" fill="var(--mesa-far)" points="952,471 996,493 952,515 908,493"/>
+<polygon class="land" fill="var(--shade)" points="996,499.7 1040,521.7 1040,540 996,518"/>
+<polygon class="land" fill="var(--dune-mid)" points="1084,499.7 1040,521.7 1040,540 1084,518"/>
+<polygon class="land" fill="var(--sand)" points="1040,477.7 1084,499.7 1040,521.7 996,499.7"/>
+<polygon class="land" fill="var(--shade)" points="1084,508.8 1128,530.8 1128,540 1084,518"/>
+<polygon class="land" fill="var(--dune-mid)" points="1172,508.8 1128,530.8 1128,540 1172,518"/>
+<polygon class="land" fill="var(--sand)" points="1128,486.8 1172,508.8 1128,530.8 1084,508.8"/>
+<polygon class="land" fill="var(--shade)" points="1172,514.9 1216,536.9 1216,540 1172,518"/>
+<polygon class="land" fill="var(--dune-mid)" points="1260,514.9 1216,536.9 1216,540 1260,518"/>
+<polygon class="land" fill="var(--sand)" points="1216,492.9 1260,514.9 1216,536.9 1172,514.9"/>
+<polygon class="land" fill="var(--dune)" points="292,518 336,540 292,562 248,540"/>
+<polygon class="land" fill="var(--dune)" points="380,518 424,540 380,562 336,540"/>
+<polygon class="land" fill="var(--dune)" points="468,518 512,540 468,562 424,540"/>
+<polygon class="land" fill="var(--dune)" points="556,518 600,540 556,562 512,540"/>
+<polygon class="land" fill="var(--dune)" points="644,518 688,540 644,562 600,540"/>
+<polygon class="land" fill="var(--shade)" points="688,534 732,556 732,562 688,540"/>
+<polygon class="land" fill="var(--dune-mid)" points="776,534 732,556 732,562 776,540"/>
+<polygon class="land" fill="var(--dune)" points="732,512 776,534 732,556 688,534"/>
+<polygon class="land" fill="var(--shade)" points="776,526.3 820,548.3 820,562 776,540"/>
+<polygon class="land" fill="var(--dune-mid)" points="864,526.3 820,548.3 820,562 864,540"/>
+<polygon class="land" fill="var(--dune)" points="820,504.3 864,526.3 820,548.3 776,526.3"/>
+<polygon class="land" fill="var(--shade)" points="864,518.9 908,540.9 908,562 864,540"/>
+<polygon class="land" fill="var(--dune-mid)" points="952,518.9 908,540.9 908,562 952,540"/>
+<polygon class="land" fill="var(--mesa)" points="908,496.9 952,518.9 908,540.9 864,518.9"/>
+<polygon class="land" fill="var(--shade)" points="952,518.4 996,540.4 996,562 952,540"/>
+<polygon class="land" fill="var(--dune-mid)" points="1040,518.4 996,540.4 996,562 1040,540"/>
+<polygon class="land" fill="var(--mesa)" points="996,496.4 1040,518.4 996,540.4 952,518.4"/>
+<polygon class="land" fill="var(--shade)" points="1040,525.3 1084,547.3 1084,562 1040,540"/>
+<polygon class="land" fill="var(--dune-mid)" points="1128,525.3 1084,547.3 1084,562 1128,540"/>
+<polygon class="land" fill="var(--dune)" points="1084,503.3 1128,525.3 1084,547.3 1040,525.3"/>
+<polygon class="land" fill="var(--shade)" points="1128,533.5 1172,555.5 1172,562 1128,540"/>
+<polygon class="land" fill="var(--dune-mid)" points="1216,533.5 1172,555.5 1172,562 1216,540"/>
+<polygon class="land" fill="var(--dune)" points="1172,511.5 1216,533.5 1172,555.5 1128,533.5"/>
+<polygon class="land" fill="var(--dune)" points="1260,518 1304,540 1260,562 1216,540"/>
+<polygon class="land" fill="var(--sand)" points="336,540 380,562 336,584 292,562"/>
+<polygon class="land" fill="var(--sand)" points="424,540 468,562 424,584 380,562"/>
+<polygon class="land" fill="var(--sand)" points="512,540 556,562 512,584 468,562"/>
+<polygon class="land" fill="var(--sand)" points="600,540 644,562 600,584 556,562"/>
+<polygon class="land" fill="var(--sand)" points="688,540 732,562 688,584 644,562"/>
+<polygon class="land" fill="var(--sand)" points="776,540 820,562 776,584 732,562"/>
+<polygon class="land" fill="var(--shade)" points="820,547.8 864,569.8 864,584 820,562"/>
+<polygon class="land" fill="var(--dune-mid)" points="908,547.8 864,569.8 864,584 908,562"/>
+<polygon class="land" fill="var(--sand)" points="864,525.8 908,547.8 864,569.8 820,547.8"/>
+<polygon class="land" fill="var(--shade)" points="908,541.9 952,563.9 952,584 908,562"/>
+<polygon class="land" fill="var(--dune-mid)" points="996,541.9 952,563.9 952,584 996,562"/>
+<polygon class="land" fill="var(--mesa-far)" points="952,519.9 996,541.9 952,563.9 908,541.9"/>
+<polygon class="land" fill="var(--shade)" points="996,543.7 1040,565.7 1040,584 996,562"/>
+<polygon class="land" fill="var(--dune-mid)" points="1084,543.7 1040,565.7 1040,584 1084,562"/>
+<polygon class="land" fill="var(--sand)" points="1040,521.7 1084,543.7 1040,565.7 996,543.7"/>
+<polygon class="land" fill="var(--shade)" points="1084,551.4 1128,573.4 1128,584 1084,562"/>
+<polygon class="land" fill="var(--dune-mid)" points="1172,551.4 1128,573.4 1128,584 1172,562"/>
+<polygon class="land" fill="var(--sand)" points="1128,529.4 1172,551.4 1128,573.4 1084,551.4"/>
+<polygon class="land" fill="var(--shade)" points="1172,558.2 1216,580.2 1216,584 1172,562"/>
+<polygon class="land" fill="var(--dune-mid)" points="1260,558.2 1216,580.2 1216,584 1260,562"/>
+<polygon class="land" fill="var(--sand)" points="1216,536.2 1260,558.2 1216,580.2 1172,558.2"/>
+<polygon class="land" fill="var(--dune)" points="380,562 424,584 380,606 336,584"/>
+<polygon class="land" fill="var(--dune)" points="468,562 512,584 468,606 424,584"/>
+<polygon class="land" fill="var(--dune)" points="556,562 600,584 556,606 512,584"/>
+<polygon class="land" fill="var(--dune)" points="644,562 688,584 644,606 600,584"/>
+<polygon class="land" fill="var(--dune)" points="732,562 776,584 732,606 688,584"/>
+<polygon class="land" fill="var(--dune)" points="820,562 864,584 820,606 776,584"/>
+<polygon class="land" fill="var(--shade)" points="864,569.3 908,591.3 908,606 864,584"/>
+<polygon class="land" fill="var(--dune-mid)" points="952,569.3 908,591.3 908,606 952,584"/>
+<polygon class="land" fill="var(--dune)" points="908,547.3 952,569.3 908,591.3 864,569.3"/>
+<polygon class="land" fill="var(--shade)" points="952,566.2 996,588.2 996,606 952,584"/>
+<polygon class="land" fill="var(--dune-mid)" points="1040,566.2 996,588.2 996,606 1040,584"/>
+<polygon class="land" fill="var(--dune)" points="996,544.2 1040,566.2 996,588.2 952,566.2"/>
+<polygon class="land" fill="var(--shade)" points="1040,570.5 1084,592.5 1084,606 1040,584"/>
+<polygon class="land" fill="var(--dune-mid)" points="1128,570.5 1084,592.5 1084,606 1128,584"/>
+<polygon class="land" fill="var(--dune)" points="1084,548.5 1128,570.5 1084,592.5 1040,570.5"/>
+<polygon class="land" fill="var(--shade)" points="1128,577.7 1172,599.7 1172,606 1128,584"/>
+<polygon class="land" fill="var(--dune-mid)" points="1216,577.7 1172,599.7 1172,606 1216,584"/>
+<polygon class="land" fill="var(--dune)" points="1172,555.7 1216,577.7 1172,599.7 1128,577.7"/>
+<polygon class="land" fill="var(--sand)" points="424,584 468,606 424,628 380,606"/>
+<polygon class="land" fill="var(--sand)" points="512,584 556,606 512,628 468,606"/>
+<polygon class="land" fill="var(--sand)" points="600,584 644,606 600,628 556,606"/>
+<polygon class="land" fill="var(--sand)" points="688,584 732,606 688,628 644,606"/>
+<polygon class="land" fill="var(--sand)" points="776,584 820,606 776,628 732,606"/>
+<polygon class="land" fill="var(--sand)" points="864,584 908,606 864,628 820,606"/>
+<polygon class="land" fill="var(--shade)" points="908,592.4 952,614.4 952,628 908,606"/>
+<polygon class="land" fill="var(--dune-mid)" points="996,592.4 952,614.4 952,628 996,606"/>
+<polygon class="land" fill="var(--sand)" points="952,570.4 996,592.4 952,614.4 908,592.4"/>
+<polygon class="land" fill="var(--shade)" points="996,592.6 1040,614.6 1040,628 996,606"/>
+<polygon class="land" fill="var(--dune-mid)" points="1084,592.6 1040,614.6 1040,628 1084,606"/>
+<polygon class="land" fill="var(--sand)" points="1040,570.6 1084,592.6 1040,614.6 996,592.6"/>
+<polygon class="land" fill="var(--shade)" points="1084,598 1128,620 1128,628 1084,606"/>
+<polygon class="land" fill="var(--dune-mid)" points="1172,598 1128,620 1128,628 1172,606"/>
+<polygon class="land" fill="var(--sand)" points="1128,576 1172,598 1128,620 1084,598"/>
+<polygon class="land" fill="var(--dune)" points="468,606 512,628 468,650 424,628"/>
+<polygon class="land" fill="var(--dune)" points="556,606 600,628 556,650 512,628"/>
+<polygon class="land" fill="var(--dune)" points="644,606 688,628 644,650 600,628"/>
+<polygon class="land" fill="var(--dune)" points="732,606 776,628 732,650 688,628"/>
+<polygon class="land" fill="var(--dune)" points="820,606 864,628 820,650 776,628"/>
+<polygon class="land" fill="var(--dune)" points="908,606 952,628 908,650 864,628"/>
+<polygon class="land" fill="var(--shade)" points="952,617.6 996,639.6 996,650 952,628"/>
+<polygon class="land" fill="var(--dune-mid)" points="1040,617.6 996,639.6 996,650 1040,628"/>
+<polygon class="land" fill="var(--dune)" points="996,595.6 1040,617.6 996,639.6 952,617.6"/>
+<polygon class="land" fill="var(--shade)" points="1040,620 1084,642 1084,650 1040,628"/>
+<polygon class="land" fill="var(--dune-mid)" points="1128,620 1084,642 1084,650 1128,628"/>
+<polygon class="land" fill="var(--dune)" points="1084,598 1128,620 1084,642 1040,620"/>
+<polygon class="land" fill="var(--sand)" points="512,628 556,650 512,672 468,650"/>
+<polygon class="land" fill="var(--sand)" points="600,628 644,650 600,672 556,650"/>
+<polygon class="land" fill="var(--sand)" points="688,628 732,650 688,672 644,650"/>
+<polygon class="land" fill="var(--sand)" points="776,628 820,650 776,672 732,650"/>
+<polygon class="land" fill="var(--sand)" points="864,628 908,650 864,672 820,650"/>
+<polygon class="land" fill="var(--shade)" points="908,643.7 952,665.7 952,672 908,650"/>
+<polygon class="land" fill="var(--dune-mid)" points="996,643.7 952,665.7 952,672 996,650"/>
+<polygon class="land" fill="var(--sand)" points="952,621.7 996,643.7 952,665.7 908,643.7"/>
+<polygon class="land" fill="var(--shade)" points="996,643.8 1040,665.8 1040,672 996,650"/>
+<polygon class="land" fill="var(--dune-mid)" points="1084,643.8 1040,665.8 1040,672 1084,650"/>
+<polygon class="land" fill="var(--sand)" points="1040,621.8 1084,643.8 1040,665.8 996,643.8"/>
+<polygon class="land" fill="var(--dune)" points="556,650 600,672 556,694 512,672"/>
+<polygon class="land" fill="var(--dune)" points="644,650 688,672 644,694 600,672"/>
+<polygon class="land" fill="var(--dune)" points="732,650 776,672 732,694 688,672"/>
+<polygon class="land" fill="var(--dune)" points="820,650 864,672 820,694 776,672"/>
+<polygon class="land" fill="var(--dune)" points="908,650 952,672 908,694 864,672"/>
+<polygon class="land" fill="var(--shade)" points="952,668.2 996,690.2 996,694 952,672"/>
+<polygon class="land" fill="var(--dune-mid)" points="1040,668.2 996,690.2 996,694 1040,672"/>
+<polygon class="land" fill="var(--dune)" points="996,646.2 1040,668.2 996,690.2 952,668.2"/>
+<polygon class="land" fill="var(--sand)" points="600,672 644,694 600,716 556,694"/>
+<polygon class="land" fill="var(--sand)" points="688,672 732,694 688,716 644,694"/>
+<polygon class="land" fill="var(--sand)" points="776,672 820,694 776,716 732,694"/>
+<polygon class="land" fill="var(--sand)" points="864,672 908,694 864,716 820,694"/>
+<polygon class="land" fill="var(--sand)" points="952,672 996,694 952,716 908,694"/>
+<polygon class="land" fill="var(--dune)" points="644,694 688,716 644,738 600,716"/>
+<polygon class="land" fill="var(--dune)" points="732,694 776,716 732,738 688,716"/>
+<polygon class="land" fill="var(--dune)" points="820,694 864,716 820,738 776,716"/>
+<polygon class="land" fill="var(--dune)" points="908,694 952,716 908,738 864,716"/>
+<polygon class="land" fill="var(--sand)" points="688,716 732,738 688,760 644,738"/>
+<polygon class="land" fill="var(--sand)" points="776,716 820,738 776,760 732,738"/>
+<polygon class="land" fill="var(--sand)" points="864,716 908,738 864,760 820,738"/>
+<polygon class="land" fill="var(--dune)" points="732,738 776,760 732,782 688,760"/>
+<polygon class="land" fill="var(--dune)" points="820,738 864,760 820,782 776,760"/>
+<polygon class="land" fill="var(--sand)" points="776,760 820,782 776,804 732,782"/>
+    <g id="base">
+      <polygon fill="#1c1612" opacity="0.28" points="688,498.8 899.2,604.4 738.6,684.7 527.4,579.1"/>
+      <polygon class="land" fill="var(--shade)" points="527.4,550.3 734.2,653.7 734.2,657.7 527.4,554.3"/>
+      <polygon class="land" fill="var(--dune-mid)" points="901.4,570.1 734.2,653.7 734.2,657.7 901.4,574.1"/>
+      <polygon class="land" fill="var(--sand)" points="694.6,466.7 901.4,570.1 734.2,653.7 527.4,550.3"/>
+      <polygon class="land" fill="var(--metal-dark)" points="562.6,469.5 630.8,503.6 630.8,517.6 562.6,483.5"/>
+      <polygon class="land" fill="var(--metal)" points="692.4,472.8 630.8,503.6 630.8,517.6 692.4,486.8"/>
+      <polygon class="land" fill="var(--panel)" points="624.2,438.7 692.4,472.8 630.8,503.6 562.6,469.5"/>
+      <polyline fill="none" stroke="var(--panel-line)" stroke-width="1" points="641.2,446.2 579.6,477"/>
+      <polyline fill="none" stroke="var(--panel-line)" stroke-width="1" points="658.3,454.8 596.7,485.5"/>
+      <polyline fill="none" stroke="var(--panel-line)" stroke-width="1" points="675.4,463.3 613.8,494.1"/>
+      <polyline fill="none" stroke="var(--panel-line)" stroke-width="1" points="603.9,447.9 672.1,482"/>
+      <polyline fill="none" stroke="var(--panel-line)" stroke-width="1" points="583.5,458 651.7,492.1"/>
+      <polygon class="land" fill="var(--metal-dark)" points="793.6,472.6 859.6,505.6 859.6,623.6 793.6,590.6"/>
+      <polygon class="land" fill="var(--metal)" points="925.6,472.6 859.6,505.6 859.6,623.6 925.6,590.6"/>
+      <polygon class="land" fill="var(--metal-top)" points="859.6,439.6 925.6,472.6 859.6,505.6 793.6,472.6"/>
+      <polygon class="glow" fill="var(--glow)" points="802.4,517 828.8,530.2 828.8,546.2 802.4,533"/>
+      <polygon class="glow" fill="var(--glow)" points="835.4,533.5 853,542.3 853,558.3 835.4,549.5"/>
+      <polygon class="glow" fill="var(--glow)" points="914.6,500.1 894.8,510 894.8,526 914.6,516.1"/>
+      <polygon class="land" fill="var(--metal-dark)" points="575.8,488.7 732,566.8 732,636.8 575.8,558.7"/>
+      <polygon class="land" fill="var(--metal)" points="864,500.8 732,566.8 732,636.8 864,570.8"/>
+      <polygon class="land" fill="var(--metal-top)" points="707.8,422.7 864,500.8 732,566.8 575.8,488.7"/>
+      <polygon class="glow" fill="var(--glow)" points="589,507.3 628.6,527.1 628.6,541.1 589,521.3"/>
+      <polygon class="glow" fill="var(--glow)" points="637.4,531.5 677,551.3 677,565.3 637.4,545.5"/>
+      <polygon class="glow" fill="var(--glow)" points="685.8,555.7 721,573.3 721,587.3 685.8,569.7"/>
+      <polygon class="glow" fill="var(--glow)" points="844.2,532.7 811.2,549.2 811.2,567.2 844.2,550.7"/>
+      <polygon class="glow" fill="var(--glow)" points="791.4,559.1 756.2,576.7 756.2,594.7 791.4,577.1"/>
+      <ellipse fill="var(--metal)" cx="720" cy="508" rx="46" ry="20"/>
+      <ellipse fill="var(--metal-top)" cx="720" cy="496" rx="46" ry="20"/>
+      <ellipse class="glow" fill="var(--glow)" cx="708" cy="492" rx="14" ry="6"/>
+      <polygon class="land" fill="var(--metal-dark)" points="736.4,583.6 806.8,618.8 806.8,658.8 736.4,623.6"/>
+      <polygon class="land" fill="var(--metal)" points="842,601.2 806.8,618.8 806.8,658.8 842,641.2"/>
+      <polygon class="land" fill="var(--metal-top)" points="771.6,566 842,601.2 806.8,618.8 736.4,583.6"/>
+      <polygon class="glow" fill="var(--glow)" points="747.4,601.1 784.8,619.8 784.8,639.8 747.4,621.1"/>
+      <line x1="859.6" y1="472.6" x2="859.6" y2="378" stroke="var(--metal-top)" stroke-width="2.5"/>
+      <line x1="841" y1="400" x2="880" y2="410" stroke="var(--metal-top)" stroke-width="1.6"/>
+      <g transform="translate(859.6 404)">
+        <ellipse fill="var(--metal-dark)" rx="20" ry="7" transform="rotate(-18)"/>
+        <ellipse fill="var(--metal-top)" cy="-2" rx="15" ry="5" transform="rotate(-18)"/>
+      </g>
+      <circle class="beacon" cx="859.6" cy="372" r="4.5" fill="var(--glow)"/>
+      <text class="mark" font-size="15" font-family="ui-sans-serif, system-ui, sans-serif" letter-spacing="0.8" transform="translate(596, 538) rotate(26.57)">Base Central</text>
+    </g>
+    <g class="weed">
+      <g class="bramble">
+        <path d="M0,-15 C8,-15 15,-8 15,0 15,8 8,15 0,15 -8,15 -15,8 -15,0 -15,-8 -8,-15 0,-15"/>
+        <path d="M-13,-6 C-4,-14 8,-10 13,-2"/>
+        <path d="M12,-8 C6,0 8,10 -2,13"/>
+        <path d="M-4,-13 C6,-6 4,6 10,8"/>
+        <path d="M-14,2 C-6,8 2,4 8,12"/>
+        <path d="M-8,-12 C-12,-2 -2,6 4,12"/>
+        <path d="M-11,8 C-2,2 6,-4 12,2"/>
+        <path d="M2,-14 C-4,-4 -8,4 0,14"/>
+        <path d="M-6,-4 C2,-8 6,2 0,8 -4,4 -8,0 -6,-4"/>
+      </g>
+    </g>
+    <g class="weed weed-late">
+      <g class="bramble" transform="scale(0.82)">
+        <path d="M0,-15 C8,-15 15,-8 15,0 15,8 8,15 0,15 -8,15 -15,8 -15,0 -15,-8 -8,-15 0,-15"/>
+        <path d="M-13,-6 C-4,-14 8,-10 13,-2"/>
+        <path d="M12,-8 C6,0 8,10 -2,13"/>
+        <path d="M-4,-13 C6,-6 4,6 10,8"/>
+        <path d="M-14,2 C-6,8 2,4 8,12"/>
+        <path d="M-8,-12 C-12,-2 -2,6 4,12"/>
+        <path d="M-11,8 C-2,2 6,-4 12,2"/>
+        <path d="M2,-14 C-4,-4 -8,4 0,14"/>
+      </g>
+    </g>
+    </g>
+  </svg>
+  <p class="message">You seem to be lost. Are you looking for <a id="way-out" href="https://www.google.com">Google</a>?</p>
+  <script>
+    (function () {
+      var places = [
+        { href: "https://www.agendalx.pt", label: "Agenda LX" },
+        { href: "https://www.visit.brussels/en/visitors/agenda", label: "the Brussels agenda" },
+        { href: "https://visit.gent.be/en", label: "Visit Gent" },
+        { href: "https://agendaculturalporto.org", label: "Agenda Cultural Porto" },
+        { href: "https://www.google.com", label: "Google" }
+      ];
+      var pick = places[Math.floor(Math.random() * places.length)];
+      var link = document.getElementById("way-out");
+      link.href = pick.href;
+      link.textContent = pick.label;
+
+      var sun = document.getElementById("sun");
+      var root = document.documentElement;
+
+      function paint() {
+        var now = new Date();
+        var hour = now.getHours() + now.getMinutes() / 60;
+        var sky = "night";
+        if (hour >= 5 && hour < 8) sky = "dawn";
+        else if (hour >= 8 && hour < 17) sky = "day";
+        else if (hour >= 17 && hour < 20.5) sky = "dusk";
+        root.setAttribute("data-sky", sky);
+
+        var theme = {
+          dawn: "#e7a48c",
+          day: "#8eafbf",
+          dusk: "#c4624a",
+          night: "#101826"
+        };
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", theme[sky]);
+
+        var t = (hour - 6) / 14;
+        if (t < 0) t = 0;
+        if (t > 1) t = 1;
+        var x = 90 + t * 1020;
+        var y = 250 - Math.sin(t * Math.PI) * 180;
+        sun.setAttribute("cx", String(Math.round(x)));
+        sun.setAttribute("cy", String(Math.round(y)));
+        var halo = document.getElementById("sun-halo");
+        if (halo) {
+          halo.setAttribute("cx", String(Math.round(x)));
+          halo.setAttribute("cy", String(Math.round(y)));
+        }
+      }
+
+      paint();
+      setInterval(paint, 60000);
+    }());
+  </script>
+</body>
+</html>
