@@ -1,4 +1,5 @@
 """Exercise deployment against disposable local Git repositories; no network."""
+import hashlib
 import pathlib
 import shutil
 import subprocess
@@ -29,15 +30,23 @@ class DeploymentTests(unittest.TestCase):
         for name in ASSETS:
             path = self.source / name
             path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text("initial " + name)
+            path.write_text(self.asset_text("initial", name))
             published = self.web / name
             published.parent.mkdir(parents=True, exist_ok=True)
             published.write_text("published " + name)
         (self.source / "README.md").write_text("not public")
+        (self.source / "apps.txt").write_text("fixture\n")
         self.commit("initial")
         self.git("clone", str(self.source), str(self.checkout))
         self.git("-C", str(self.checkout), "config", "user.name", "Deployment test")
         self.git("-C", str(self.checkout), "config", "user.email", "deploy-test@example.invalid")
+
+    def asset_text(self, prefix, name):
+        value=prefix+" "+name
+        if name=="index.html":
+            digest=hashlib.sha256(b"fixture\n").hexdigest()
+            value+='\n<meta name="directory-config" content="'+digest+'">'
+        return value
 
     def git(self, *args):
         return subprocess.run(["git", *args], check=True, capture_output=True, text=True)
@@ -57,18 +66,26 @@ class DeploymentTests(unittest.TestCase):
 
     def test_pulls_and_publishes_only_assets_preserving_other_host_files(self):
         for name in ASSETS:
-            (self.source / name).write_text("new " + name)
+            (self.source / name).write_text(self.asset_text("new", name))
         self.commit("new assets")
         (self.web / ".htaccess").write_text("host configuration")
         result = self.deploy()
         self.assertEqual(result.returncode, 0, result.stderr)
         for name in ASSETS:
-            self.assertEqual((self.web / name).read_text(), "new " + name)
+            self.assertEqual((self.web / name).read_text(), self.asset_text("new", name))
         self.assertEqual((self.web / ".htaccess").read_text(), "host configuration")
         self.assertEqual(
             set(p.name for p in self.web.iterdir()),
             {"index.html", "styles.css", "favicon.svg", "assets", ".htaccess"},
         )
+
+    def test_changed_folder_list_requires_regenerated_page(self):
+        (self.source / "apps.txt").write_text("changed\n")
+        self.commit("change directory selection without regeneration")
+        result=self.deploy()
+        self.assertNotEqual(result.returncode,0)
+        self.assertIn("build-directory.py",result.stderr)
+        self.assert_unpublished()
 
     def test_dirty_checkout_does_not_publish(self):
         (self.checkout / "index.html").write_text("local edit")

@@ -1,34 +1,21 @@
 # Application registry
 
-Registry updated: 2026-10-08. Repository paths are development references, not public toolbox content. Site URLs are configured targets; this registry does not claim a live health check.
+Generated from `apps.txt` and each app’s own manifest/deployment documentation. Edit only the folder list to change the selection or order; run `python3 scripts/build-directory.py` locally before committing. URLs are configured destinations, not a live-availability guarantee.
 
-## FuelLog
+| App | Folder | Site |
+| --- | --- | --- |
+| a4 | `../a4` | [a4.basecentral.link](https://a4.basecentral.link/) |
+| BaseCentral Agenda | `../agenda` | [agenda.basecentral.link](https://agenda.basecentral.link/) |
+| Balance | `../balance` | [balance.basecentral.link](https://balance.basecentral.link/) |
+| Doctools Document and Image Optimizer | `../doctools` | [smaller.basecentral.link](https://smaller.basecentral.link/) |
+| Elementar | `../elementar` | [elementar.basecentral.link](https://elementar.basecentral.link/) |
+| Eternal Timer | `../eternytimer` | [timers.trekm.com](https://timers.trekm.com/) |
+| Festival | `../festival` | [festival.basecentral.link](https://festival.basecentral.link/) |
+| Laura’s Flipbook Studio | `../flip` | [flip.basecentral.link](https://flip.basecentral.link/) |
+| Lista do Congelador | `../freezer` | [freezer.trekm.com](https://freezer.trekm.com/) |
+| FuelLog | `../fuel` | [gas.basecentral.link](https://gas.basecentral.link/) |
+| VIO Converter | `../govio` | [vio.trekm.com](https://vio.trekm.com/) |
+| BayBook — registo de oficina | `../oficina` | [zepedrosa.basecentral.link](https://zepedrosa.basecentral.link/) |
+| Sopa de Letras | `../sopa_de_letras` | [ramen.basecentral.link](https://ramen.basecentral.link/) |
 
-- Purpose: log vehicle fill-ups and analyze fuel consumption and costs.
-- Folder: `/Users/nfp/github/fuel/`
-- Repository: https://github.com/nunopedrosa/fuel
-- Site: https://fuel.trekm.com/
-- Local storage: IndexedDB.
-- Offline core: vehicle records, fuel logging and analysis, according to the app README.
-- Portability: JSON backup and CSV export; several import formats.
-- Optional online features: external fuel-price providers, maps and a same-origin PHP station proxy.
-- Hosting: static assets on DreamHost, with optional PHP support for the station proxy.
-- Compatibility: app documentation explicitly includes iPhone 6 / iOS 12.5.7 requirements.
-- Source for these details: the application's README. Changes belong in its own repository.
-
-## Eternal Timer
-
-- Purpose: manage multiple stopwatches and countdown timers.
-- Folder: `/Users/nfp/github/eternytimer/`
-- Repository: https://github.com/nunopedrosa/eternytimer
-- Site: https://timers.trekm.com/
-- Local storage: browser localStorage.
-- Offline core: PWA offline support, according to the app README.
-- Portability: CSV export and import.
-- Server requirements: static files; no application backend.
-- Hosting: DreamHost, according to the app's deployment instructions.
-- Source for these details: the application's README. The public app title is Eternal Timer; the development folder and repository are named eternytimer.
-
-## Registering another app
-
-Record its name, purpose, folder, repository, site, local storage, offline behavior, import/export support and any online dependencies. Add its public name, brief description and HTTPS link to the toolbox page when that page is implemented. Update this registry and the README at the same time.
+App-specific storage, compatibility, accounts and backup contracts remain in each app’s own instructions and README. The directory reads no app storage and introduces no shared account or data service.

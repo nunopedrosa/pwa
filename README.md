@@ -1,61 +1,67 @@
-# trekm PWA toolbox
+# BaseCentral
 
-Central working project for the trekm collection of local-first Progressive Web Apps. The public toolbox's new address is [basecentral.link](https://basecentral.link/). Hosting and live availability have not yet been verified.
+The app catalogue at [basecentral.link](https://basecentral.link/), with the
+existing BaseCentral artwork behind a responsive list of app links.
 
-Each application keeps its own development folder, Git repository and deployed site. This project holds shared goals, decisions and an app directory; it does not hold application data or provide a shared backend.
+The website is static HTML/CSS. It has no JavaScript runtime, accounts, tracking,
+shared app storage or installation requirement. Each app opens on its own site.
 
-## Applications
+## One configuration file
 
-| Application | Purpose | Site |
-| --- | --- | --- |
-| FuelLog | Vehicle fill-ups, fuel consumption and costs | [fuel.trekm.com](https://fuel.trekm.com/) |
-| Eternal Timer | Multiple stopwatches and countdown timers | [timers.trekm.com](https://timers.trekm.com/) |
+Edit **[apps.txt](apps.txt)** to add, remove or reorder apps. It contains sibling
+folder names, one per line; `#` comments and blank lines are allowed:
 
-## Working documents
-
-- [Agent development baseline](AGENTS.md) — reusable guidance adapted from FuelLog, with instructions for adoption by other PWAs.
-- [Shared principles](docs/PRINCIPLES.md)
-- [Application registry](docs/APPS.md)
-- [Decisions and roadmap](docs/ROADMAP.md)
-- [Toolbox design](docs/superpowers/specs/2026-10-08-toolbox-design.md)
-
-## Project boundaries
-
-Use this project for cross-app goals, the directory and toolbox page. Implement and test app-specific changes in the application's own folder. Shared principles express the collection's goals; the registry records current capabilities and differences rather than assuming all apps already satisfy every goal.
-
-## Toolbox page
-
-The toolbox is implemented as public `index.html`, `styles.css`, `favicon.svg` and `assets/BaseCentral.jpg`. It uses no runtime JavaScript, backend, build step, analytics or local data storage.
-
-Each app's artwork is referenced directly from its own site:
-
-- `https://fuel.trekm.com/icons/icon.svg`
-- `https://timers.trekm.com/icons/icon.svg`
-
-The artwork is not copied here. Fixed-size artwork frames keep the layout stable when images are unavailable, and app names and links remain usable. Image requests explicitly suppress referrers.
-
-## Local preview
-
-From the project folder, run:
-
-```sh
-python3 -m http.server 8000 --bind 127.0.0.1
+```text
+festival
+fuel
+eternytimer
 ```
 
-Open http://127.0.0.1:8000/. The directory itself does not install a service worker or promise offline availability. Each linked PWA handles its own installation and offline behavior.
+Then regenerate locally:
 
-## Adding an application
+```sh
+python3 scripts/build-directory.py
+python3 scripts/build-directory.py --check
+```
 
-1. Add an app entry in `index.html` with its public name, short description, HTTPS URL and artwork URL. Keep images decorative with empty alternative text and `referrerpolicy="no-referrer"`.
-2. Add its folder, repository, storage, backup and offline details to `docs/APPS.md`.
-3. Update the applications table in this README.
-4. Check the page on a narrow screen and with the artwork request blocked. Check keyboard focus and the destination link.
+The generator reads each selected app's existing manifest and public deployment
+URL, then updates `index.html` and [the application registry](docs/APPS.md).
+There is no directory-specific metadata mapping to maintain. An empty list
+produces an empty catalogue. Missing folders, invalid metadata and missing URLs
+stop generation before replacing the previous page.
 
-## Deployment to basecentral.link
+Keep the app checkouts beside this repository. A new app needs its own valid
+manifest and documented public HTTPS URL, normally `DEPLOY_URL` in its deployment
+profile. Names and icons come from its manifest. Documentation fallbacks preserve
+hosting subdirectories. The generator reads public metadata only, never executes
+shell profiles, contacts app services or changes sibling repositories.
 
-Configure the hostname and HTTPS with the hosting provider. The existing apps document DreamHost hosting; this toolbox also works on any static host.
+Commit the list and generated output together. Deploy refuses a changed folder
+list with stale HTML. `--root /path/to/apps-parent` can select another local
+checkout layout. Python is only a local maintenance tool; the server needs no
+Python, Node, database or frontend build system.
 
-Upload **only** these files to the domain's public web root:
+## Presentation
+
+The artwork remains the full-page background, with the catalogue in translucent
+panels. App artwork is referenced directly from each app's own site, with
+referrers suppressed. Names and links remain usable if artwork cannot load.
+Edit `templates/directory.html` or `styles.css` for presentation changes, then
+regenerate; do not hand-edit generated app links in `index.html`.
+
+## Publish on the existing DreamHost host
+
+The source checkout is `~/pwa`; the public web directory is
+`~/basecentral.link`. Run under the hosting account:
+
+```sh
+bash "$HOME/pwa/scripts/deploy.sh" --dry-run "$HOME/basecentral.link"
+bash "$HOME/pwa/scripts/deploy.sh" --verify "$HOME/basecentral.link"
+```
+
+A normal deployment requires a clean tracked branch, fetches and pulls with
+`--ff-only`, validates the generated directory and stages the complete public
+set. Assets publish before HTML. The four-file public allowlist is unchanged:
 
 ```text
 index.html
@@ -64,55 +70,43 @@ favicon.svg
 assets/BaseCentral.jpg
 ```
 
-Keep `AGENTS.md`, this README, `docs/` and `.git/` outside the public web root. The public assets are ready for upload; this project has not been deployed by this chat. Hosting access and the actual web-root path must be confirmed before publication.
+Configuration, templates, Git history and development tools stay outside the
+public directory. Unrelated host files are preserved. Publication is atomic per
+file, not for the whole release. If new deployment code/profile arrives during
+a pull, review it and rerun. No app migrations, credentials, DNS or hosting
+settings are changed by this command.
 
-### Pull and publish on the host
+`--dry-run` checks the currently checked-out files without fetching, writing,
+creating locks or making HTTP requests. To preview the latest source, manually
+pull first. `--verify` deploys and then runs the configured public HTTP check;
+that check alone does not prove every linked app's functionality.
 
-After committing and pushing this project to GitHub, connect to the host by SSH. Keep the source checkout outside the public web directory. For a new checkout:
+See [the shared deployment contract](docs/SHARED_DEPLOYMENT.md).
 
-```sh
-mkdir -p "$HOME/repos"
-git clone https://github.com/nunopedrosa/pwa.git "$HOME/repos/pwa"
-```
-
-If your checkout already exists outside the public web directory, use its path instead. Run the deployment script on the host:
-
-```sh
-sh "$HOME/repos/pwa/scripts/deploy.sh" "$HOME/basecentral.link"
-```
-
-Replace the last argument with `basecentral.link`'s actual, existing web directory from your hosting settings. That directory must be writable by your SSH user. The same command performs the first publication and subsequent updates, and can be run from any current directory. Git must already be able to pull from the checkout's configured upstream; the script does not configure credentials, DNS or hosting.
-
-The script:
-
-- Requires a clean checkout on a branch that tracks a remote branch.
-- Runs `git pull --ff-only` and refuses to deploy host-only commits.
-- Requires the checkout and public directory to be separate, non-overlapping paths.
-- Validates every published source file and destination entry before publication.
-- Copies only `index.html`, `styles.css`, `favicon.svg` and `assets/BaseCentral.jpg`; other host files, including `.htaccess`, stay in place.
-- Stages the files before replacing them, with readable permissions. Each file replacement is atomic, but the published set is not one atomic release.
-- Prints the deployed commit and directory. It does not verify DNS, HTTPS or live site availability.
-
-When a pull or validation fails, the published files are left unchanged. If a failure occurs during the final file replacements, publication may be partial; correct the reported problem and rerun the command. The script does not reset Git, discard local work or remove unrelated host files.
-
-The deployment regression checks use temporary local repositories and no network:
+## Checks
 
 ```sh
+python3 tests/test_directory.py
+python3 scripts/build-directory.py --check
 python3 scripts/test-deploy.py
+node tests/directory-browser.cjs
+git diff --check
 ```
 
-Python is needed only for these checks; the host deployment script uses a POSIX shell, Git and standard file utilities.
+The Python tests use synthetic apps and disposable local Git repositories.
+Browser checks use optional local Playwright/Chromium development tooling;
+`PLAYWRIGHT_PATH` and `CHROMIUM_PATH` can select installed tools. They cover
+no-JavaScript links, narrow/desktop widths, keyboard navigation, enlarged text,
+image failure and referrer suppression. See [catalogue notes](docs/DIRECTORY.md).
 
-## Verification
+## Shared collection resources
 
-Checked on 2026-10-08 in headless Chrome: desktop and 320 px layouts, enlarged text, keyboard focus, exact links, artwork failure behavior, request domains and referrer suppression. Both artwork URLs returned HTTP 200. Normal text and action contrast were checked. No page JavaScript errors occurred. No Safari 12 or physical iPhone verification was performed, and the toolbox domain's deployment has not been verified.
+- [Agent development baseline](AGENTS.md)
+- [Shared principles](docs/PRINCIPLES.md)
+- [Application registry](docs/APPS.md)
+- [Control gallery](shared/controls/gallery.html) and [integration guide](shared/controls/README.md)
+- [Shared controls/deployment implementation report](docs/SHARED_IMPLEMENTATION_REPORT.md)
 
-## Shared deployment command (2026-11-01)
-
-See [the current deployment contract](docs/SHARED_DEPLOYMENT.md) and `scripts/deploy-profile.sh`. This supersedes older script flags, SSH-only wrappers and broad deletion instructions below/above; hosting coordinates and app-specific private/release requirements still apply. No deployment is authorized by source changes.
-
-## Shared implementation resources
-
-- [Control gallery](shared/controls/gallery.html) and [integration guide](shared/controls/README.md).
-- [Implementation and verification report](docs/SHARED_IMPLEMENTATION_REPORT.md).
-- Common deployment source: `shared/deploy/deploy-core.sh`; each app owns its profile.
+Common controls and deployment code are maintained here and copied locally into
+each app. `scripts/sync-controls.py --check` and `scripts/sync-deploy.py --check`
+detect drift. The directory does not create a runtime dependency for the apps.

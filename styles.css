@@ -1,33 +1,64 @@
 :root {
-  color-scheme: light;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  color: #172d43;
-  background: #f2f6fa;
+  color-scheme: dark;
+  font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+  color: #f3f6fa;
+  background: #101b28;
   font-size: 16px;
+  --ink: #f3f6fa;
+  --muted: #c1cedb;
+  --line: rgba(201, 220, 237, .23);
+  --focus: #95e2ff;
 }
-
 * { box-sizing: border-box; }
-body { margin: 0; line-height: 1.6; }
-.container { width: 100%; max-width: 1008px; margin: 0 auto; padding: 0 24px; }
-.masthead { background: #172d43; color: #ffffff; padding: 56px 0 48px; }
-h1 { margin: 0 0 16px; font-size: 3rem; line-height: 1.1; font-weight: 700; letter-spacing: -0.04em; }
-.masthead p { margin: 0; font-size: 1.125rem; line-height: 1.65; }
-.apps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; padding: 32px 0; }
-.app { padding: 28px; background: #ffffff; border-radius: 12px; }
-.artwork { display: block; width: 72px; height: 72px; margin-bottom: 22px; overflow: hidden; }
-.artwork img { display: block; width: 100%; height: auto; max-height: 100%; object-fit: contain; }
-h2 { margin: 0 0 8px; font-size: 1.625rem; line-height: 1.3; letter-spacing: -0.025em; }
-.description { margin: 0 0 24px; max-width: 36ch; }
-.open-app { display: inline-flex; align-items: center; min-height: 48px; padding: 10px 18px; border-radius: 6px; background: #175da8; color: #ffffff; text-decoration: none; font-weight: 600; }
-.open-app:hover { background: #124c89; text-decoration: underline; }
-.open-app:focus { outline: 3px solid #172d43; outline-offset: 4px; }
-.hostname { margin: 12px 0 0; font-size: 0.875rem; color: #526579; overflow-wrap: anywhere; }
-footer.container { padding-bottom: 32px; color: #526579; }
-footer p { margin: 0; font-size: 0.9375rem; }
-
-@media (max-width: 640px) {
-  .masthead { padding: 36px 0; }
-  h1 { font-size: 2.25rem; }
-  .apps { grid-template-columns: 1fr; gap: 18px; padding: 24px 0; }
-  .app { padding: 24px; }
+html { min-height: 100%; scroll-behavior: smooth; }
+body { margin: 0; min-height: 100vh; line-height: 1.5; }
+a { color: inherit; }
+.scene { position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: -1; background: #101b28 url("assets/BaseCentral.jpg") center 48% / cover no-repeat; }
+.scene::after { content: ""; position: absolute; top: 0; right: 0; bottom: 0; left: 0; background: linear-gradient(180deg, rgba(4, 12, 23, .24), rgba(4, 12, 23, .46) 35%, rgba(4, 12, 23, .68)); }
+.shell { width: 100%; max-width: 1120px; margin: 0 auto; padding: 28px 32px 20px; padding-left: max(32px, env(safe-area-inset-left)); padding-right: max(32px, env(safe-area-inset-right)); padding-bottom: max(20px, env(safe-area-inset-bottom)); }
+.masthead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 58px; }
+.brand { display: inline-flex; align-items: center; min-height: 44px; font-size: 20px; font-weight: 650; letter-spacing: -.6px; text-decoration: none; text-shadow: 0 1px 8px #06101d; }
+.brand-mark { width: 28px; height: 28px; margin-right: 10px; fill: none; stroke: #b7eaff; stroke-width: 1.5; }
+.site-address { color: #dce6ef; font-size: 12px; text-shadow: 0 1px 8px #06101d; }
+main { padding: 26px; border: 1px solid var(--line); border-radius: 4px; background: rgba(8, 20, 34, .88); }
+@supports ((backdrop-filter: blur(12px)) or (-webkit-backdrop-filter: blur(12px))) { main { background: rgba(8, 20, 34, .78); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); } }
+.introduction { padding: 0 4px 22px; }
+h1 { margin: 0; font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif; font-size: 36px; font-weight: 550; line-height: 1.15; letter-spacing: -1.2px; }
+.introduction p { margin: 7px 0 0; color: var(--muted); font-size: 14px; }
+.directory { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding: 0; margin: 0; list-style: none; }
+.directory li { min-width: 0; }
+.app-link { display: grid; grid-template-columns: 50px minmax(0, 1fr) 20px; gap: 14px; align-items: center; min-height: 98px; height: 100%; padding: 16px; border: 1px solid rgba(201, 220, 237, .17); border-radius: 4px; text-decoration: none; background: rgba(234, 243, 252, .055); transition: background-color .12s, border-color .12s; }
+.app-link:hover { border-color: rgba(177, 224, 246, .65); background: rgba(196, 231, 251, .14); }
+.app-link:active { background: rgba(196, 231, 251, .2); }
+a:focus, [tabindex]:focus { outline: 2px solid var(--focus); outline-offset: 3px; }
+#apps:focus { outline: none; }
+.app-artwork { position: relative; display: flex; width: 50px; height: 50px; align-items: center; justify-content: center; border-radius: 4px; background: #e9eff4; color: #28435a; overflow: hidden; }
+.app-artwork img { position: absolute; top: 1px; left: 1px; display: block; width: 48px; height: 48px; object-fit: contain; font-size: 0; }
+.app-initial { font-size: 24px; font-weight: 650; }
+.app-copy { display: block; min-width: 0; }
+.app-name { display: block; font-size: 17px; font-weight: 600; line-height: 1.3; overflow-wrap: break-word; }
+.hostname { display: block; margin-top: 5px; color: var(--muted); font-size: 12px; overflow-wrap: anywhere; word-wrap: break-word; }
+.open-icon { width: 20px; height: 20px; fill: none; stroke: #b7d9ed; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+footer { display: flex; justify-content: space-between; align-items: center; padding: 18px 3px 0; color: #dce5ee; font-size: 12px; text-shadow: 0 1px 5px #06101d; }
+footer p { margin: 0; }
+.skip-link { position: fixed; top: -100px; left: 16px; z-index: 2; padding: 10px 16px; border-radius: 2px; background: #10283d; color: white; }
+.skip-link:focus { top: 12px; }
+@media (min-width: 1500px) { .masthead { margin-bottom: 80px; } }
+@media (max-width: 700px) {
+  .shell { padding: 16px 16px 20px; padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
+  .masthead { margin-bottom: 30px; }
+  main { padding: 16px; }
+  .introduction { padding: 1px 1px 18px; }
+  h1 { font-size: 29px; letter-spacing: -.8px; }
+  .directory { grid-template-columns: minmax(0, 1fr); }
+  .app-link { min-height: 88px; padding: 12px; grid-template-columns: 46px minmax(0, 1fr) 18px; gap: 12px; }
+  .app-artwork { width: 46px; height: 46px; }
+  .app-artwork img { width: 44px; height: 44px; }
+  .app-name { font-size: 16px; }
+  .open-icon { width: 18px; height: 18px; }
+  footer { align-items: flex-start; gap: 12px; }
+  footer p { text-align: right; max-width: 22ch; }
 }
+@media (max-width: 360px) { .site-address { display: none; } .shell { padding-left: 12px; padding-right: 12px; } main { padding: 12px; } .app-link { gap: 10px; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .app-link { transition: none; } }
+@media print { .scene, .masthead, .skip-link, .open-icon, footer { display: none; } body { color: black; background: white; } .shell, main { max-width: none; padding: 0; background: none; border: 0; } .app-link { color: black; border-color: #999; break-inside: avoid; } .hostname, .introduction p { color: #444; } }

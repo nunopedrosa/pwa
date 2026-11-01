@@ -10,6 +10,7 @@ class Profiles(unittest.TestCase):
    base=pathlib.Path(temp);origin=base/'origin';origin.mkdir();(origin/'scripts').mkdir()
    for name in ['deploy.sh','deploy-core.sh','deploy-profile.sh']:
     shutil.copyfile(source/'scripts'/name,origin/'scripts'/name)
+   if app=='pwa':shutil.copyfile(source/'apps.txt',origin/'apps.txt')
    if app=='doctools':shutil.copyfile(source/'scripts/deploy-hashes.txt',origin/'scripts/deploy-hashes.txt')
    missing=[]
    for name in files:

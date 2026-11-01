@@ -1,0 +1,14 @@
+# App folders beside this pwa repository, in display order.
+a4
+agenda
+balance
+doctools
+elementar
+eternytimer
+festival
+flip
+freezer
+fuel
+govio
+oficina
+sopa_de_letras

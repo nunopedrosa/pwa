@@ -1,327 +1,44 @@
 <!doctype html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#10151d">
-  <meta name="description" content="Base Central — your gateway to connected spaces.">
-  <title>Base Central</title>
-  <style>
-    :root {
-      color-scheme: dark;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #10151d;
-      color: #f5f7fa
-    }
-
-    * {
-      box-sizing: border-box
-    }
-
-    html,
-    body {
-      margin: 0;
-      min-height: 100%;
-    }
-
-    body {
-      min-height: 100svh;
-      overflow-x: hidden
-    }
-
-    .scene {
-      position: fixed;
-      inset: 0;
-      z-index: -2;
-      background: #171d27
-    }
-
-    .scene::before {
-      content: "";
-      position: absolute;
-      inset: -3%;
-      background-image: url('assets/BaseCentral.jpg');
-      background-position: center 52%;
-      background-size: cover;
-      background-repeat: no-repeat;
-      filter: saturate(.87) contrast(1.04)
-    }
-
-    .scene::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(6, 12, 20, .74) 0%, rgba(6, 12, 20, .08) 29%, rgba(6, 12, 20, .1) 55%, rgba(6, 12, 20, .78) 100%)
-    }
-
-    .shell {
-      min-height: 100svh;
-      display: flex;
-      flex-direction: column;
-      padding: clamp(20px, 3vw, 48px);
-      padding-top: max(clamp(20px, 3vw, 48px), env(safe-area-inset-top));
-      padding-bottom: max(20px, env(safe-area-inset-bottom));
-    }
-
-    header,
-    footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: clamp(14px, 1.5vw, 19px);
-      font-weight: 800;
-      letter-spacing: .22em;
-      text-transform: uppercase;
-      text-decoration: none;
-      color: inherit
-    }
-
-    .mark {
-      width: 30px;
-      height: 30px;
-      border: 2px solid #89dfff;
-      transform: rotate(45deg);
-      display: grid;
-      place-items: center
-    }
-
-    .mark span {
-      transform: rotate(-45deg);
-      font-size: 15px;
-      letter-spacing: 0;
-      color: #89dfff
-    }
-
-    .status {
-      font-size: 11px;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: #c4d7e1;
-      white-space: nowrap
-    }
-
-    .dot {
-      display: inline-block;
-      width: 7px;
-      height: 7px;
-      background: #8be5d4;
-      border-radius: 50%;
-      box-shadow: 0 0 12px #8be5d4;
-      margin-right: 9px
-    }
-
-    main {
-      flex: 1;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      text-align: center;
-      padding: 40px 0 clamp(30px, 7vh, 90px)
-    }
-
-    .panel {
-      max-width: 670px;
-      padding: 20px 28px 24px;
-      background: rgba(8, 14, 22, .48);
-      border: 1px solid rgba(193, 222, 238, .2);
-      backdrop-filter: blur(13px);
-      -webkit-backdrop-filter: blur(13px);
-      box-shadow: 0 15px 60px rgba(0, 0, 0, .22)
-    }
-
-    .eyebrow {
-      font-size: 11px;
-      letter-spacing: .35em;
-      text-transform: uppercase;
-      color: #a4dff7;
-      margin: 0 0 10px
-    }
-
-    a {
-      color: #000000;
-      text-decoration: none;
-      transition: color .2s
-    }
-
-    h1 {
-      font-size: clamp(27px, 4vw, 54px);
-      line-height: 1.08;
-      letter-spacing: .05em;
-      margin: 0 0 12px;
-      text-transform: uppercase
-    }
-
-    p {
-      line-height: 1.6;
-      color: #d4e1e9;
-      margin: 0
-    }
-
-    .actions {
-      margin-top: 20px;
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      flex-wrap: wrap
-    }
-
-    .button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 44px;
-      padding: 11px 22px;
-      border: 1px solid #91dcf5;
-      color: #09131b;
-      background: #a5e6fa;
-      font-size: 12px;
-      letter-spacing: .13em;
-      text-transform: uppercase;
-      font-weight: 750;
-      text-decoration: none;
-      transition: background .2s, transform .2s
-    }
-
-    .button:hover {
-      background: #d1f4ff;
-      transform: translateY(-2px)
-    }
-
-    .button.secondary {
-      background: rgba(6, 16, 26, .55);
-      color: #f3fbff;
-      border-color: rgba(210, 237, 250, .45)
-    }
-
-    .button.secondary:hover {
-      background: rgba(37, 63, 80, .75)
-    }
-
-    footer {
-      font-size: 11px;
-      letter-spacing: .12em;
-      color: #c3d3df;
-      text-transform: uppercase
-    }
-
-    footer span:last-child {
-      text-align: right
-    }
-
-    @media(max-width:650px) {
-      .scene::before {
-        background-position: center center;
-        background-size: auto 100%;
-      }
-
-      .shell {
-        padding-inline: 18px
-      }
-
-      header {
-        align-items: flex-start
-      }
-
-      .status {
-        font-size: 9px;
-        letter-spacing: .09em
-      }
-
-      .brand {
-        font-size: 13px;
-        letter-spacing: .14em
-      }
-
-      .mark {
-        width: 24px;
-        height: 24px
-      }
-
-      .mark span {
-        font-size: 12px
-      }
-
-      main {
-        padding-bottom: clamp(26px, 6vh, 65px)
-      }
-
-      .panel {
-        padding: 18px 16px 20px;
-        width: 100%
-      }
-
-      footer {
-        font-size: 9px;
-        letter-spacing: .04em;
-        gap: 10px
-      }
-    }
-
-    @media(max-height:600px) and (min-width:651px) {
-      main {
-        padding: 20px 0
-      }
-
-      .panel {
-        padding: 12px 20px
-      }
-
-      h1 {
-        font-size: 30px
-      }
-
-      .actions {
-        margin-top: 12px
-      }
-    }
-
-    @media(prefers-reduced-motion:reduce) {
-      .button {
-        transition: none
-      }
-    }
-  </style>
+  <meta name="theme-color" content="#101b28">
+  <meta name="description" content="The BaseCentral app catalogue. Find and open the apps in one place.">
+  <meta name="directory-config" content="b1300a634ac8d03459b73a3328a7fb3b04b20072b98b36f604f31290adbbc1ff">
+  <title>BaseCentral — App catalogue</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css?v=79fd425885df">
 </head>
-
 <body>
-  <div class="scene" role="img"
-    aria-label="Isometric science-fiction base with CENTRAL-shaped rooftops on a lunar landscape"></div>
+  <div class="scene" aria-hidden="true"></div>
+  <a class="skip-link" href="#apps">Skip to apps</a>
   <div class="shell">
-    <header><a class="brand" href="/" aria-label="Base Central home"><span class="mark"
-          aria-hidden="true"><span>◆</span></span>Base Central</a><span class="status"><span class="dot"></span>Systems
-        online</span></header>
+    <header class="masthead">
+      <a class="brand" href="./" aria-label="BaseCentral home"><svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="m16 2 14 14-14 14L2 16Z"/><path d="m16 10 6 6-6 6-6-6Z"/></svg><span>BaseCentral</span></a>
+      <span class="site-address">basecentral.link</span>
+    </header>
     <main>
-      <section class="panel" aria-labelledby="welcome">
-        <p class="eyebrow">Welcome to</p>
-        <h1 id="welcome">Base CENTRAL</h1>  
-        <div class="actions"><p class="button">You seem to be lost. Are you looking for &nbsp;<a id="way-out" href="https://www.google.com">Google</a>?</p></div>
-  <script>
-    (function () {
-      var places = [
-        { href: "https://www.agendalx.pt", label: "Agenda LX" },
-        { href: "https://www.visit.brussels/en/visitors/agenda", label: "Brussels agenda" },
-        { href: "https://visit.gent.be/en", label: "Gent Agenda" },
-        { href: "https://agendaculturalporto.org", label: "Agenda Porto" },
-        { href: "https://www.google.com", label: "Google" }
-      ];
-      var pick = places[Math.floor(Math.random() * places.length)];
-      var link = document.getElementById("way-out");
-      link.href = pick.href;
-      link.textContent = pick.label;
-    })();
-  </script>
-      </section>
+      <div class="introduction"><h1>App catalogue</h1><p>Choose an app to open it.</p></div>
+      <nav id="apps" aria-label="Apps" tabindex="-1">
+        <ul class="directory">
+          <li><a class="app-link" href="https://a4.basecentral.link/"><span class="app-artwork" aria-hidden="true"><span class="app-initial">A</span><img src="https://a4.basecentral.link/assets/icon.svg" alt="" width="48" height="48" loading="lazy" decoding="async" referrerpolicy="no-referrer"></span><span class="app-copy"><span class="app-name">a4</span><span class="hostname">a4.basecentral.link</span></span><svg class="open-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10"/></svg></a></li>
+          <li><a class="app-link" href="https://agenda.basecentral.link/"><span class="app-artwork" aria-hidden="true"><span class="app-initial">B</span></span><span class="app-copy"><span class="app-name">BaseCentral Agenda</span><span class="hostname">agenda.basecentral.link</span></span><svg class="open-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10"/></svg></a></li>
+          <li><a class="app-link" href="https://balance.basecentral.link/"><span class="app-artwork" aria-hidden="true"><span class="app-initial">B</span><img src="https://balance.basecentral.link/icons/icon-192.png" alt="" width="48" height="48" loading="lazy" decoding="async" referrerpolicy="no-referrer"></span><span class="app-copy"><span class="app-name">Balance</span><span class="hostname">balance.basecentral.link</span></span><svg class="open-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10"/></svg></a></li>
+          <li><a class="app-link" href="https://smaller.basecentral.link/"><span class="app-artwork" aria-hidden="true"><span class="app-initial">D</span><img src="https://smaller.basecentral.link/icons/icon-192.png" alt="" width="48" height="48" loading="lazy" decoding="async" referrerpolicy="no-referrer"></span><span class="app-copy"><span class="app-name">Doctools Document and Image Optimizer</span><span class="hostname">smaller.basecentral.link</span></span><svg class="open-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10"/></svg></a></li>
+          <li><a class="app-link" href="https://elementar.basecentral.link/"><span class="app-artwork" aria-hidden="true"><span class="app-initial">E</span><img src="https://elementar.basecentral.link/assets/icons/icon-192.png?v=elementar-v62" alt="" width="48" height="48" loading="lazy" decoding="async" referrerpolicy="no-referrer"></span><span class="app-copy"><span class="app-name">Elementar</span><span class="hostname">elementar.basecentral.link</span></span><svg class="open-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10"/></svg></a></li>
+          <li><a class="app-link" href="https://timers.trekm.com/"><span class="app-artwork" aria-hidden="true"><span class="app-initial">E</span><img src="https://timers.trekm.com/icons/icon.svg" alt="" width="48" height="48" loading="lazy" decoding="async" referrerpolicy="no-referrer"></span><span class="app-copy"><span class="app-name">Eternal Timer</span><span class="hostname">timers.trekm.com</span></span><svg class="open-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10"/></svg></a></li>
+          <li><a class="app-link" href="https://festival.basecentral.link/"><span class="app-artwork" aria-hidden="true"><span class="app-initial">F</span><img src="https://festival.basecentral.link/assets/icon.svg" alt="" width="48" height="48" loading="lazy" decoding="async" referrerpolicy="no-referrer"></span><span class="app-copy"><span class="app-name">Festival</span><span class="hostname">festival.basecentral.link</span></span><svg class="open-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10"/></svg></a></li>
+          <li><a class="app-link" href="https://flip.basecentral.link/"><span class="app-artwork" aria-hidden="true"><span class="app-initial">L</span><img src="https://flip.basecentral.link/icon-192.png" alt="" width="48" height="48" loading="lazy" decoding="async" referrerpolicy="no-referrer"></span><span class="app-copy"><span class="app-name">Laura’s Flipbook Studio</span><span class="hostname">flip.basecentral.link</span></span><svg class="open-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10"/></svg></a></li>
+          <li><a class="app-link" href="https://freezer.trekm.com/"><span class="app-artwork" aria-hidden="true"><span class="app-initial">L</span><img src="https://freezer.trekm.com/icon.svg" alt="" width="48" height="48" loading="lazy" decoding="async" referrerpolicy="no-referrer"></span><span class="app-copy"><span class="app-name">Lista do Congelador</span><span class="hostname">freezer.trekm.com</span></span><svg class="open-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10"/></svg></a></li>
+          <li><a class="app-link" href="https://gas.basecentral.link/"><span class="app-artwork" aria-hidden="true"><span class="app-initial">F</span><img src="https://gas.basecentral.link/icons/icon-192.png" alt="" width="48" height="48" loading="lazy" decoding="async" referrerpolicy="no-referrer"></span><span class="app-copy"><span class="app-name">FuelLog</span><span class="hostname">gas.basecentral.link</span></span><svg class="open-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10"/></svg></a></li>
+          <li><a class="app-link" href="https://vio.trekm.com/"><span class="app-artwork" aria-hidden="true"><span class="app-initial">V</span><img src="https://vio.trekm.com/icons/icon-192.png" alt="" width="48" height="48" loading="lazy" decoding="async" referrerpolicy="no-referrer"></span><span class="app-copy"><span class="app-name">VIO Converter</span><span class="hostname">vio.trekm.com</span></span><svg class="open-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10"/></svg></a></li>
+          <li><a class="app-link" href="https://zepedrosa.basecentral.link/"><span class="app-artwork" aria-hidden="true"><span class="app-initial">B</span><img src="https://zepedrosa.basecentral.link/icons/icon.svg" alt="" width="48" height="48" loading="lazy" decoding="async" referrerpolicy="no-referrer"></span><span class="app-copy"><span class="app-name">BayBook — registo de oficina</span><span class="hostname">zepedrosa.basecentral.link</span></span><svg class="open-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10"/></svg></a></li>
+          <li><a class="app-link" href="https://ramen.basecentral.link/"><span class="app-artwork" aria-hidden="true"><span class="app-initial">S</span><img src="https://ramen.basecentral.link/icons/icon-192.png" alt="" width="48" height="48" loading="lazy" decoding="async" referrerpolicy="no-referrer"></span><span class="app-copy"><span class="app-name">Sopa de Letras</span><span class="hostname">ramen.basecentral.link</span></span><svg class="open-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10"/></svg></a></li>
+        </ul>
+      </nav>
     </main>
-    <footer><span>BASECENTRAL.LINK</span><span>Est. on the frontier</span></footer>
+    <footer><span>BaseCentral</span><p>Each app opens on its own website.</p></footer>
   </div>
 </body>
-
 </html>
