@@ -1,6 +1,6 @@
 # App folders beside this pwa repository, in display order.
 a4
-agenda
+# agenda
 balance
 doctools
 elementar
@@ -8,7 +8,7 @@ eternytimer
 festival
 flip
 freezer
-fuel
+# fuel
 govio
-oficina
+# oficina
 sopa_de_letras

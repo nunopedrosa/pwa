@@ -5,7 +5,6 @@ Generated from `apps.txt` and each app’s own manifest/deployment documentation
 | App | Folder | Site |
 | --- | --- | --- |
 | a4 | `../a4` | [a4.basecentral.link](https://a4.basecentral.link/) |
-| BaseCentral Agenda | `../agenda` | [agenda.basecentral.link](https://agenda.basecentral.link/) |
 | Balance | `../balance` | [balance.basecentral.link](https://balance.basecentral.link/) |
 | Doctools Document and Image Optimizer | `../doctools` | [smaller.basecentral.link](https://smaller.basecentral.link/) |
 | Elementar | `../elementar` | [elementar.basecentral.link](https://elementar.basecentral.link/) |
@@ -13,9 +12,7 @@ Generated from `apps.txt` and each app’s own manifest/deployment documentation
 | Festival | `../festival` | [festival.basecentral.link](https://festival.basecentral.link/) |
 | Laura’s Flipbook Studio | `../flip` | [flip.basecentral.link](https://flip.basecentral.link/) |
 | Lista do Congelador | `../freezer` | [freezer.trekm.com](https://freezer.trekm.com/) |
-| FuelLog | `../fuel` | [gas.basecentral.link](https://gas.basecentral.link/) |
 | VIO Converter | `../govio` | [vio.trekm.com](https://vio.trekm.com/) |
-| BayBook — registo de oficina | `../oficina` | [zepedrosa.basecentral.link](https://zepedrosa.basecentral.link/) |
 | Sopa de Letras | `../sopa_de_letras` | [ramen.basecentral.link](https://ramen.basecentral.link/) |
 
 App-specific storage, compatibility, accounts and backup contracts remain in each app’s own instructions and README. The directory reads no app storage and introduces no shared account or data service.
