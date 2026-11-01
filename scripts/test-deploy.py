@@ -24,6 +24,8 @@ class DeploymentTests(unittest.TestCase):
         (self.source / "scripts").mkdir()
         self.assertTrue(SCRIPT.is_file(), "deployment script is not implemented")
         shutil.copyfile(SCRIPT, self.source / "scripts/deploy.sh")
+        for name in ("deploy-core.sh", "deploy-profile.sh"):
+            shutil.copyfile(SCRIPT.with_name(name), self.source / "scripts" / name)
         for name in ASSETS:
             path = self.source / name
             path.parent.mkdir(parents=True, exist_ok=True)

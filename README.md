@@ -106,3 +106,13 @@ Python is needed only for these checks; the host deployment script uses a POSIX 
 ## Verification
 
 Checked on 2026-10-08 in headless Chrome: desktop and 320 px layouts, enlarged text, keyboard focus, exact links, artwork failure behavior, request domains and referrer suppression. Both artwork URLs returned HTTP 200. Normal text and action contrast were checked. No page JavaScript errors occurred. No Safari 12 or physical iPhone verification was performed, and the toolbox domain's deployment has not been verified.
+
+## Shared deployment command (2026-11-01)
+
+See [the current deployment contract](docs/SHARED_DEPLOYMENT.md) and `scripts/deploy-profile.sh`. This supersedes older script flags, SSH-only wrappers and broad deletion instructions below/above; hosting coordinates and app-specific private/release requirements still apply. No deployment is authorized by source changes.
+
+## Shared implementation resources
+
+- [Control gallery](shared/controls/gallery.html) and [integration guide](shared/controls/README.md).
+- [Implementation and verification report](docs/SHARED_IMPLEMENTATION_REPORT.md).
+- Common deployment source: `shared/deploy/deploy-core.sh`; each app owns its profile.
