@@ -11,8 +11,8 @@ Generated from `apps.txt` and each app’s own manifest/deployment documentation
 | Eternal Timer | `../eternytimer` | [timers.basecentral.link](https://timers.basecentral.link/) |
 | Festival | `../festival` | [festival.basecentral.link](https://festival.basecentral.link/) |
 | Laura’s Flipbook Studio | `../flip` | [flip.basecentral.link](https://flip.basecentral.link/) |
-| Lista do Congelador | `../freezer` | [freezer.trekm.com](https://freezer.trekm.com/) |
-| VIO Converter | `../govio` | [vio.trekm.com](https://vio.trekm.com/) |
+| Lista do Congelador | `../freezer` | [freezer.basecentral.link](https://freezer.basecentral.link/) |
+| VIO Converter | `../govio` | [vio.basecentral.link](https://vio.basecentral.link/) |
 | Sopa de Letras | `../sopa_de_letras` | [ramen.basecentral.link](https://ramen.basecentral.link/) |
 | Verbal | `../verbal` | [verbal.basecentral.link](https://verbal.basecentral.link/) |
 
