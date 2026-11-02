@@ -12,3 +12,4 @@ freezer
 govio
 # oficina
 sopa_de_letras
+verbal

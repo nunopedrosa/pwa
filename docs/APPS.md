@@ -14,5 +14,6 @@ Generated from `apps.txt` and each app’s own manifest/deployment documentation
 | Lista do Congelador | `../freezer` | [freezer.trekm.com](https://freezer.trekm.com/) |
 | VIO Converter | `../govio` | [vio.trekm.com](https://vio.trekm.com/) |
 | Sopa de Letras | `../sopa_de_letras` | [ramen.basecentral.link](https://ramen.basecentral.link/) |
+| Verbal | `../verbal` | [verbal.basecentral.link](https://verbal.basecentral.link/) |
 
 App-specific storage, compatibility, accounts and backup contracts remain in each app’s own instructions and README. The directory reads no app storage and introduces no shared account or data service.
