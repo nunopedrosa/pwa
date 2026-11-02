@@ -8,7 +8,7 @@ Generated from `apps.txt` and each app’s own manifest/deployment documentation
 | Balance | `../balance` | [balance.basecentral.link](https://balance.basecentral.link/) |
 | Doctools Document and Image Optimizer | `../doctools` | [smaller.basecentral.link](https://smaller.basecentral.link/) |
 | Elementar | `../elementar` | [elementar.basecentral.link](https://elementar.basecentral.link/) |
-| Eternal Timer | `../eternytimer` | [timers.trekm.com](https://timers.trekm.com/) |
+| Eternal Timer | `../eternytimer` | [timers.basecentral.link](https://timers.basecentral.link/) |
 | Festival | `../festival` | [festival.basecentral.link](https://festival.basecentral.link/) |
 | Laura’s Flipbook Studio | `../flip` | [flip.basecentral.link](https://flip.basecentral.link/) |
 | Lista do Congelador | `../freezer` | [freezer.trekm.com](https://freezer.trekm.com/) |
